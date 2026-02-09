@@ -1,0 +1,282 @@
+<!doctype html>
+
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Chain-of-Thought (CoT) Techniques</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&amp;family=Kanit:wght@300;400;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #0f172a;
+      }
+
+      .slide-container {
+        width: 1280px;
+        height: 720px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+      }
+
+      .thai-font {
+        font-family: "Kanit", sans-serif;
+      }
+
+      .code-font {
+        font-family: "JetBrains Mono", monospace;
+      }
+
+      .glow-blob-blue {
+        position: absolute;
+        width: 600px;
+        height: 600px;
+        background-color: #0ea5e9;
+        border-radius: 50%;
+        filter: blur(120px);
+        opacity: 0.15;
+        top: -200px;
+        right: -100px;
+        z-index: 0;
+      }
+
+      .glow-blob-green {
+        position: absolute;
+        width: 500px;
+        height: 500px;
+        background-color: #10b981;
+        border-radius: 50%;
+        filter: blur(100px);
+        opacity: 0.1;
+        bottom: -150px;
+        left: -100px;
+        z-index: 0;
+      }
+
+      .glass-panel {
+        background-color: rgba(30, 41, 59, 0.6);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+
+      .grid-bg {
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 40px 40px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        opacity: 0.3;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="slide-container text-white">
+      <!-- Background Elements -->
+      <div class="grid-bg"></div>
+      <div class="glow-blob-blue"></div>
+      <div class="glow-blob-green"></div>
+
+      <!-- Header -->
+      <div class="relative z-10 px-16 pt-6 pb-2 flex justify-between items-end border-b border-gray-800">
+        <div>
+          <div class="flex items-center space-x-3 mb-1">
+            <span class="text-blue-400 code-font text-xs font-bold tracking-wider uppercase">Prompting Techniques</span>
+            <div class="h-px w-10 bg-gray-700"></div>
+          </div>
+          <h1 class="text-3xl font-bold tracking-tight text-white flex items-center gap-3">
+            Chain-of-Thought
+            <span class="text-gray-500 font-light text-xl code-font">(CoT)</span>
+            <span class="text-blue-400">Techniques</span>
+          </h1>
+        </div>
+        <div class="text-right">
+          <p class="text-gray-400 text-xs code-font">Module 03: Techniques</p>
+        </div>
+      </div>
+
+      <!-- Main Content - 3x2 Grid Layout -->
+      <div class="relative z-10 flex-1 px-16 py-4 flex flex-col gap-3">
+        
+        <!-- Row 1: Definition (ซ้าย) + Why CoT Works (ขวา) -->
+        <div class="flex gap-5 h-1/3">
+          <!-- 1. Definition — ซ้ายบน -->
+          <div class="w-5/12 glass-panel rounded-xl p-4 border-l-4 border-blue-500 flex flex-col justify-center">
+            <div class="flex items-center space-x-3 mb-2">
+              <div class="w-6 h-6 rounded bg-blue-500 bg-opacity-30 flex items-center justify-center text-blue-400 text-sm font-bold">1</div>
+              <i class="fas fa-book text-blue-400 text-base"></i>
+              <h3 class="text-sm font-bold text-blue-300 code-font">คำนิยาม — CoT คืออะไร?</h3>
+            </div>
+            <p class="text-sm text-gray-300 thai-font leading-relaxed">
+              เทคนิคที่สั่งให้ AI <span class="text-blue-300 font-bold">"แสดงขั้นตอนการคิด"</span> 
+              ก่อนตอบคำถาม ช่วยให้ AI ใช้ตรรกะอย่างเป็นระบบ
+            </p>
+          </div>
+
+          <!-- 2. Why CoT Works — ขวาบน -->
+          <div class="w-7/12 glass-panel rounded-xl p-4 border-l-4 border-purple-500 flex flex-col justify-center">
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center space-x-3">
+                <div class="w-6 h-6 rounded bg-purple-500 bg-opacity-30 flex items-center justify-center text-purple-400 text-sm font-bold">2</div>
+                <i class="fas fa-brain text-purple-400 text-base"></i>
+                <h3 class="text-sm font-bold text-purple-300 code-font">ทำไม CoT ถึงได้ผล? — Dual Process Theory</h3>
+              </div>
+            </div>
+            <div class="flex gap-4 items-start">
+              <!-- Human Brain Example -->
+              <div class="flex-1 bg-gray-800 bg-opacity-40 rounded-lg p-2.5 border border-gray-700">
+                <p class="text-xs text-gray-400 thai-font mb-1.5 font-bold">🧠 ตัวอย่างสมองมนุษย์:</p>
+                <p class="text-xs text-gray-300 thai-font leading-relaxed">
+                  <span class="text-blue-400 font-semibold">System 1:</span> "2+2 = ?" → <span class="text-green-400">ตอบทันที "4"</span><br/>
+                  <span class="text-purple-400 font-semibold">System 2:</span> "17×24 = ?" → <span class="text-yellow-400">ต้องคิดทีละขั้นตอน</span>
+                </p>
+              </div>
+              <!-- AI Analogy -->
+              <div class="flex-1 bg-purple-900 bg-opacity-20 rounded-lg p-2.5 border border-purple-500 border-opacity-40">
+                <p class="text-xs text-gray-400 thai-font mb-1.5 font-bold">🤖 เปรียบกับ AI:</p>
+                <p class="text-xs text-gray-300 thai-font leading-relaxed">
+                  ปกติ AI ใช้ <span class="text-blue-400 font-bold">System 1</span> (เร็ว, ทายทันที)<br/>
+                  แต่ CoT บังคับให้ใช้ <span class="text-purple-300 font-bold">System 2</span> (ช้า, คิดวิเคราะห์)
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 2: Purpose (ซ้าย) + Key Words (ขวา) -->
+        <div class="flex gap-5 h-1/3">
+          <!-- 3. Purpose — กลางซ้าย -->
+          <div class="w-5/12 glass-panel rounded-xl p-4 border-l-4 border-yellow-500 flex flex-col justify-center">
+            <div class="flex items-center space-x-3 mb-2">
+              <div class="w-6 h-6 rounded bg-yellow-500 bg-opacity-30 flex items-center justify-center text-yellow-400 text-sm font-bold">3</div>
+              <i class="fas fa-bullseye text-yellow-400 text-base"></i>
+              <h3 class="text-sm font-bold text-yellow-300 code-font">จุดประสงค์ — ใช้เพื่ออะไร?</h3>
+            </div>
+            <ul class="text-sm text-gray-300 thai-font space-y-1.5">
+              <li class="flex items-start">
+                <span class="text-yellow-400 mr-2">•</span>
+                <span>ลด <span class="text-red-400">Hallucination</span> ในงานที่ต้องใช้ตรรกะ</span>
+              </li>
+              <li class="flex items-start">
+                <span class="text-yellow-400 mr-2">•</span>
+                <span>บังคับให้ AI <span class="text-yellow-300">คิดก่อนตอบ</span> (ไม่ใช่ทาย)</span>
+              </li>
+              <li class="flex items-start">
+                <span class="text-yellow-400 mr-2">•</span>
+                <span>ตรวจสอบได้ว่า AI คิดผิดขั้นตอนไหน</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- 4. Key Words — กลางขวา -->
+          <div class="w-7/12 glass-panel rounded-xl p-4 border-l-4 border-cyan-500 flex flex-col justify-center">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center space-x-3">
+                <div class="w-6 h-6 rounded bg-cyan-500 bg-opacity-30 flex items-center justify-center text-cyan-400 text-sm font-bold">4</div>
+                <i class="fas fa-key text-cyan-400 text-base"></i>
+                <h3 class="text-sm font-bold text-cyan-300 code-font">Key Words — เติมท้าย Prompt</h3>
+              </div>
+            </div>
+            <div class="flex gap-3 flex-wrap">
+              <code class="bg-purple-900 bg-opacity-30 text-purple-300 text-sm px-3 py-1.5 rounded-lg border border-purple-500 border-opacity-40 font-bold">"Let's think step by step"</code>
+              <code class="bg-green-900 bg-opacity-30 text-green-300 text-sm px-3 py-1.5 rounded-lg border border-green-500 border-opacity-40 font-bold">"Take a deep breath and work through this step by step"</code>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 3: Example (ซ้าย) + Pros (ขวา) -->
+        <div class="flex gap-5 flex-1">
+          <!-- 5. Example — ล่างซ้าย (Updated Layout: Stacked) -->
+          <div class="w-1/2 glass-panel rounded-xl p-4 border-l-4 border-green-500">
+            <div class="flex items-center space-x-3 mb-3">
+              <div class="w-6 h-6 rounded bg-green-500 bg-opacity-30 flex items-center justify-center text-green-400 text-sm font-bold">5</div>
+              <i class="fas fa-terminal text-green-400 text-base"></i>
+              <h3 class="text-sm font-bold text-green-300 code-font">ตัวอย่างการใช้งาน</h3>
+            </div>
+            <div class="flex flex-col gap-3">
+              <!-- Prompt (Top) -->
+              <div class="flex-1">
+                <p class="text-xs text-gray-400 code-font mb-1">Prompt:</p>
+                <div class="bg-black bg-opacity-50 rounded-lg p-2.5 border border-gray-700 text-xs">
+                  <pre class="code-font text-gray-300 whitespace-pre-wrap leading-tight text-xs">"ถ้ามีแอปเปิ้ล 5 ผล ให้คน 3 คน คนละเท่าๆ กัน เหลือกี่ผล?
+<span class="text-purple-400 font-bold">Let's think step by step.</span>"</pre>
+                </div>
+              </div>
+              <!-- Output (Bottom) -->
+              <div class="flex-1">
+                <p class="text-xs text-green-400 code-font mb-1">AI Output:</p>
+                <div class="bg-green-900 bg-opacity-20 rounded-lg p-2.5 border border-green-500 border-opacity-40 text-xs">
+                  <pre class="code-font text-gray-200 whitespace-pre-wrap leading-tight text-xs"><span class="text-blue-300">1:</span> มีแอปเปิ้ล 5 ผล
+<span class="text-blue-300">2:</span> แบ่งให้ 3 คน = 1 ผล/คน
+<span class="text-blue-300">3:</span> ใช้ไป 3×1 = 3 ผล
+<span class="text-yellow-300 font-bold">ตอบ:</span> เหลือ <span class="text-green-400 font-bold">2 ผล</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 6. Pros — ล่างขวา -->
+          <div class="w-1/2 glass-panel rounded-xl p-4 border-l-4 border-emerald-500 h-fit flex flex-col justify-center h-full">
+            <div class="flex items-center space-x-3 mb-3">
+              <div class="w-6 h-6 rounded bg-emerald-500 bg-opacity-30 flex items-center justify-center text-emerald-400 text-sm font-bold">6</div>
+              <i class="fas fa-check-circle text-emerald-400 text-base"></i>
+              <h3 class="text-sm font-bold text-emerald-300 code-font">ข้อดี — ได้อะไรจากการใช้ CoT?</h3>
+            </div>
+            <div class="flex gap-4">
+              <ul class="text-sm text-gray-300 thai-font space-y-1.5 flex-1">
+                <li class="flex items-start">
+                  <span class="text-emerald-400 mr-2">✓</span>
+                  <span><span class="text-white font-bold">เพิ่มความแม่นยำ</span> ในงาน Math/Logic</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-emerald-400 mr-2">✓</span>
+                  <span>สามารถ <span class="text-white font-bold">Debug</span> ได้ว่า AI คิดผิดตรงไหน</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-emerald-400 mr-2">✓</span>
+                  <span>ใช้ได้กับ <span class="text-white font-bold">ทุก LLM</span></span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-emerald-400 mr-2">✓</span>
+                  <span>เหมาะกับ: Debugging, Math, Design</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="absolute bottom-6 right-8 text-gray-600 code-font text-xs flex items-center space-x-4">
+        <span>AI Prompt Engineering</span>
+        <span class="w-px h-3 bg-gray-700"></span>
+        <span class="text-gray-500">2026</span>
+        <span class="w-px h-3 bg-gray-700"></span>
+        <span class="text-blue-500 font-bold">06</span>
+      </div>
+    </div>
+  </body>
+</html>
+

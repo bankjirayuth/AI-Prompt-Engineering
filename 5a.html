@@ -1,0 +1,258 @@
+<!doctype html>
+
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Prompting Techniques: Zero-Shot & Few-Shot</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&amp;family=Kanit:wght@300;400;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #0f172a;
+      }
+
+      .slide-container {
+        width: 1280px;
+        height: 720px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+      }
+
+      .thai-font {
+        font-family: "Kanit", sans-serif;
+      }
+
+      .code-font {
+        font-family: "JetBrains Mono", monospace;
+      }
+
+      .glow-blob-yellow {
+        position: absolute;
+        width: 600px;
+        height: 600px;
+        background-color: #eab308;
+        border-radius: 50%;
+        filter: blur(120px);
+        opacity: 0.1;
+        top: -200px;
+        left: -100px;
+        z-index: 0;
+      }
+
+      .glow-blob-purple {
+        position: absolute;
+        width: 600px;
+        height: 600px;
+        background-color: #8b5cf6;
+        border-radius: 50%;
+        filter: blur(120px);
+        opacity: 0.12;
+        bottom: -200px;
+        right: -100px;
+        z-index: 0;
+      }
+
+      .glass-panel {
+        background-color: rgba(30, 41, 59, 0.6);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+
+      .grid-bg {
+        background-image: linear-gradient(
+            rgba(255, 255, 255, 0.03) 1px,
+            transparent 1px
+          ),
+          linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.03) 1px,
+            transparent 1px
+          );
+        background-size: 40px 40px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        opacity: 0.3;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="slide-container text-white">
+      <!-- Background Elements -->
+      <div class="grid-bg"></div>
+      <div class="glow-blob-yellow"></div>
+      <div class="glow-blob-purple"></div>
+
+      <!-- Header -->
+      <div class="relative z-10 px-16 pt-6 pb-2 flex justify-between items-end border-b border-gray-800">
+        <div>
+          <div class="flex items-center space-x-3 mb-1">
+            <span class="text-blue-400 code-font text-xs font-bold tracking-wider uppercase">Prompting Techniques</span>
+            <div class="h-px w-10 bg-gray-700"></div>
+          </div>
+          <h1 class="text-3xl font-bold thai-font tracking-tight text-white">
+            <span class="text-yellow-400">Zero-Shot</span> vs
+            <span class="text-purple-400">Few-Shot</span> Techniques
+          </h1>
+        </div>
+        <div class="text-right">
+          <p class="text-gray-400 text-xs code-font">Module 03: Techniques</p>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="relative z-10 flex-1 px-16 py-3 flex gap-5">
+        
+        <!-- Left: Zero-Shot (Yellow Theme) -->
+        <div class="flex-1 flex flex-col">
+          <div class="glass-panel rounded-xl p-4 border-t-4 border-yellow-500 flex-1 flex flex-col">
+            <div class="flex items-center space-x-3 mb-3">
+              <div class="w-10 h-10 rounded-lg bg-yellow-500 bg-opacity-20 flex items-center justify-center">
+                <i class="fas fa-bolt text-yellow-400 text-lg"></i>
+              </div>
+              <div>
+                <h2 class="text-lg font-bold text-yellow-300 code-font">Zero-Shot Prompting</h2>
+                <p class="text-xs text-gray-500 thai-font">ถามตรงๆ ไม่มีตัวอย่าง</p>
+              </div>
+            </div>
+            
+            <!-- Definition -->
+            <div class="bg-yellow-900 bg-opacity-20 rounded-lg p-3 mb-3 border border-yellow-500 border-opacity-30">
+              <p class="text-xs text-gray-300 thai-font leading-relaxed">
+                <span class="text-yellow-400 font-bold code-font">คำนิยาม:</span> 
+                การสั่ง AI โดย <span class="text-yellow-300 font-bold">ไม่ให้ตัวอย่าง</span> ใดๆ 
+                เพียงอธิบายว่าต้องการอะไร ให้ AI ใช้ความรู้ที่ถูก Train มาตอบ
+              </p>
+            </div>
+
+            <!-- Example -->
+            <div class="flex-1">
+              <p class="text-xs text-gray-400 mb-1.5 code-font">
+                <i class="fas fa-terminal mr-1 text-yellow-400"></i> ตัวอย่าง Prompt:
+              </p>
+              <div class="bg-black bg-opacity-50 rounded-lg p-3 border border-yellow-500 border-opacity-30">
+                <pre class="code-font text-xs text-gray-300 leading-relaxed whitespace-pre-wrap">"จัดหมวดหมู่ข้อความนี้ว่าเป็น Positive, Negative หรือ Neutral:
+
+ข้อความ: 'บริการรวดเร็วมาก ประทับใจครับ'"</pre>
+              </div>
+              <div class="mt-2 bg-yellow-900 bg-opacity-20 border border-yellow-500 border-opacity-30 rounded-lg p-2.5">
+                <p class="text-xs code-font text-yellow-300">
+                  <i class="fas fa-robot mr-1"></i> Output: <span class="text-white font-bold">Positive</span>
+                </p>
+              </div>
+            </div>
+
+            <!-- When to Use -->
+            <div class="mt-3 pt-2 border-t border-gray-700">
+              <p class="text-xs text-gray-400 thai-font">
+                <i class="fas fa-check text-yellow-400 mr-1"></i> 
+                <span class="text-gray-300">ใช้เมื่อ:</span> งานง่าย, AI เข้าใจได้เลย, ไม่ต้องการ format เฉพาะ
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Few-Shot (Purple Theme) -->
+        <div class="flex-1 flex flex-col">
+          <div class="glass-panel rounded-xl p-4 border-t-4 border-purple-500 flex-1 flex flex-col">
+            <div class="flex items-center space-x-3 mb-3">
+              <div class="w-10 h-10 rounded-lg bg-purple-500 bg-opacity-20 flex items-center justify-center">
+                <i class="fas fa-layer-group text-purple-400 text-lg"></i>
+              </div>
+              <div>
+                <h2 class="text-lg font-bold text-purple-300 code-font">Few-Shot Prompting</h2>
+                <p class="text-xs text-gray-500 thai-font">ให้ตัวอย่าง 1-5 ชุดก่อนถาม</p>
+              </div>
+            </div>
+            
+            <!-- Definition -->
+            <div class="bg-purple-900 bg-opacity-20 rounded-lg p-3 mb-3 border border-purple-500 border-opacity-30">
+              <p class="text-xs text-gray-300 thai-font leading-relaxed">
+                <span class="text-purple-400 font-bold code-font">คำนิยาม:</span> 
+                การสั่ง AI โดย <span class="text-purple-300 font-bold">ให้ตัวอย่าง</span> input-output ที่ต้องการ 2-5 ชุด 
+                ช่วยให้ AI เข้าใจ pattern และ format ที่ต้องการ
+              </p>
+            </div>
+
+            <!-- Example -->
+            <div class="flex-1">
+              <p class="text-xs text-gray-400 mb-1.5 code-font">
+                <i class="fas fa-terminal mr-1 text-purple-400"></i> ตัวอย่าง Prompt:
+              </p>
+              <div class="bg-black bg-opacity-50 rounded-lg p-3 border border-purple-500 border-opacity-30">
+                <pre class="code-font text-xs text-gray-300 leading-relaxed whitespace-pre-wrap">"จัดหมวดหมู่ข้อความ:
+
+ตัวอย่าง 1: 'สินค้าดีมาก' → Positive
+ตัวอย่าง 2: 'ส่งช้ามาก' → Negative
+ตัวอย่าง 3: 'ได้รับแล้ว' → Neutral
+
+ข้อความ: 'ขอบคุณมากครับ ประทับใจบริการ'"</pre>
+              </div>
+              <div class="mt-2 bg-purple-900 bg-opacity-20 border border-purple-500 border-opacity-30 rounded-lg p-2.5">
+                <p class="text-xs code-font text-purple-300">
+                  <i class="fas fa-robot mr-1"></i> Output: <span class="text-white font-bold">Positive</span>
+                </p>
+              </div>
+            </div>
+
+            <!-- When to Use -->
+            <div class="mt-3 pt-2 border-t border-gray-700">
+              <p class="text-xs text-gray-400 thai-font">
+                <i class="fas fa-check text-purple-400 mr-1"></i> 
+                <span class="text-gray-300">ใช้เมื่อ:</span> ต้องการ format เฉพาะ, งานซับซ้อน, ต้องการ consistent
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Pro Tip -->
+      <div class="relative z-10 px-16 pb-4">
+        <div class="glass-panel rounded-lg p-3 border border-green-500 border-opacity-30" style="background-color: rgba(16, 185, 129, 0.05)">
+          <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 rounded-full bg-green-500 bg-opacity-20 flex items-center justify-center text-green-400 shrink-0">
+              <i class="fas fa-lightbulb text-sm"></i>
+            </div>
+            <p class="text-gray-300 thai-font text-xs">
+              <span class="text-green-400 font-bold code-font">Pro Tip:</span> 
+              เริ่มด้วย <span class="text-yellow-400">Zero-Shot</span> ก่อน หากผลลัพธ์ไม่ดี ค่อยเปลี่ยนเป็น <span class="text-purple-400">Few-Shot</span> — 
+              <span class="text-white">ยิ่งให้ตัวอย่างมาก ยิ่ง consistent</span> แต่ก็ consume token มากขึ้น
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="absolute bottom-6 right-8 text-gray-600 code-font text-xs flex items-center space-x-4">
+        <span>AI Prompt Engineering</span>
+        <span class="w-px h-3 bg-gray-700"></span>
+        <span class="text-gray-500">2026</span>
+        <span class="w-px h-3 bg-gray-700"></span>
+        <span class="text-yellow-500 font-bold">5a</span>
+      </div>
+    </div>
+  </body>
+</html>
+

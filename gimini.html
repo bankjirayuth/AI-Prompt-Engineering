@@ -1,0 +1,1082 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Prompt Engineering</title>
+    <!-- Google Fonts: Prompt for Thai, Fira Code for Code, Rajdhani for Titles -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Prompt:wght@300;400;600&family=Rajdhani:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <style>
+      :root {
+        --bg-color: #050505;
+        --card-bg: rgba(20, 20, 35, 0.4);
+        --glass-border: rgba(255, 255, 255, 0.1);
+        --neon-cyan: #00f3ff;
+        --neon-purple: #bc13fe;
+        --neon-green: #0aff68;
+        --text-main: #e0e0e0;
+        --text-muted: #a0a0a0;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: var(--bg-color);
+        background-image:
+          radial-gradient(
+            circle at 15% 50%,
+            rgba(188, 19, 254, 0.15),
+            transparent 25%
+          ),
+          radial-gradient(
+            circle at 85% 30%,
+            rgba(0, 243, 255, 0.15),
+            transparent 25%
+          );
+        color: var(--text-main);
+        font-family: "Prompt", sans-serif;
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      /* Scanline effect */
+      body::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background:
+          linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+          linear-gradient(
+            90deg,
+            rgba(255, 0, 0, 0.06),
+            rgba(0, 255, 0, 0.02),
+            rgba(0, 0, 255, 0.06)
+          );
+        background-size:
+          100% 2px,
+          3px 100%;
+        pointer-events: none;
+        z-index: 1000;
+      }
+
+      /* Slide Container */
+      .slide-deck {
+        position: relative;
+        width: 1280px;
+        height: 720px;
+        background: rgba(10, 10, 10, 0.6);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--glass-border);
+        border-radius: 16px;
+        box-shadow: 0 0 40px rgba(0, 243, 255, 0.1);
+        overflow: hidden;
+      }
+
+      .slide {
+        display: none; /* Hidden by default */
+        width: 100%;
+        height: 100%;
+        padding: 60px 80px;
+        flex-direction: column;
+        animation: fadeIn 0.5s ease-in-out;
+      }
+
+      .slide.active {
+        display: flex;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.98);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      /* Typography */
+      h1,
+      h2,
+      h3 {
+        font-family: "Rajdhani", "Prompt", sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      h1 {
+        font-size: 72px;
+        font-weight: 700;
+        background: linear-gradient(90deg, #fff, var(--neon-cyan));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+        margin-bottom: 20px;
+      }
+
+      h2.slide-title {
+        font-size: 42px;
+        color: white;
+        border-left: 6px solid var(--neon-cyan);
+        padding-left: 20px;
+        margin-bottom: 40px;
+        display: flex;
+        align-items: center;
+      }
+
+      p,
+      li {
+        font-size: 20px;
+        line-height: 1.6;
+        color: var(--text-muted);
+        margin-bottom: 15px;
+      }
+
+      strong {
+        color: var(--neon-cyan);
+        font-weight: 600;
+      }
+
+      /* Glass Cards */
+      .card {
+        background: var(--card-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        padding: 25px;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        border-color: var(--neon-cyan);
+        box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+      }
+
+      /* Grid Layouts */
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        height: 100%;
+        align-items: center;
+      }
+
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 25px;
+      }
+
+      /* Code Block - Dracula Theme */
+      .code-block {
+        font-family: "Fira Code", monospace;
+        background-color: #1e1e2e; /* Darker bg */
+        color: #f8f8f2;
+        padding: 20px;
+        border-radius: 8px;
+        border: 1px solid #6272a4;
+        font-size: 16px;
+        position: relative;
+        overflow-x: auto;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      }
+
+      .code-block::before {
+        content: "CODE";
+        position: absolute;
+        top: 5px;
+        right: 10px;
+        font-size: 10px;
+        color: #6272a4;
+      }
+
+      .keyword {
+        color: #ff79c6;
+      } /* Pink */
+      .string {
+        color: #f1fa8c;
+      } /* Yellow */
+      .function {
+        color: #50fa7b;
+      } /* Green */
+      .comment {
+        color: #6272a4;
+        font-style: italic;
+      }
+
+      /* UI Controls */
+      .controls {
+        position: absolute;
+        bottom: 30px;
+        right: 40px;
+        display: flex;
+        gap: 15px;
+        z-index: 2000;
+      }
+
+      .btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--glass-border);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 30px;
+        cursor: pointer;
+        font-family: "Rajdhani", sans-serif;
+        font-weight: 700;
+        text-transform: uppercase;
+        transition: 0.3s;
+        backdrop-filter: blur(5px);
+      }
+
+      .btn:hover {
+        background: var(--neon-cyan);
+        color: black;
+        box-shadow: 0 0 15px var(--neon-cyan);
+      }
+
+      .progress-bar {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 4px;
+        background: var(--neon-purple);
+        width: 0%;
+        transition: width 0.3s;
+        box-shadow: 0 0 10px var(--neon-purple);
+      }
+
+      /* Speaker Notes */
+      .notes-panel {
+        position: absolute;
+        bottom: 80px;
+        right: 40px;
+        width: 400px;
+        background: rgba(0, 0, 0, 0.9);
+        border: 1px solid var(--neon-green);
+        color: #0aff68;
+        padding: 20px;
+        border-radius: 8px;
+        font-family: "Fira Code", monospace;
+        font-size: 14px;
+        display: none;
+        z-index: 3000;
+        box-shadow: 0 0 20px rgba(10, 255, 104, 0.2);
+      }
+
+      .notes-panel.visible {
+        display: block;
+      }
+
+      .notes-header {
+        border-bottom: 1px solid var(--neon-green);
+        margin-bottom: 10px;
+        padding-bottom: 5px;
+        font-weight: bold;
+      }
+
+      /* Icons */
+      .icon-box {
+        font-size: 40px;
+        margin-bottom: 15px;
+        background: linear-gradient(
+          45deg,
+          var(--neon-cyan),
+          var(--neon-purple)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide-deck">
+      <!-- SLIDE 1: Title -->
+      <div class="slide active" id="slide-1">
+        <div
+          style="
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+          "
+        >
+          <p
+            style="
+              color: var(--neon-purple);
+              letter-spacing: 2px;
+              margin-bottom: 10px;
+            "
+          >
+            > INTERNAL / WORKSHOP / 01
+          </p>
+          <h1>AI PROMPT ENGINEERING<br />FOR DEVELOPERS</h1>
+          <p style="font-size: 24px; color: white">
+            ศาสตร์การเขียนคำสั่งเพื่อควบคุม AI ให้ได้ผลลัพธ์ดั่งใจนึก
+          </p>
+          <p
+            style="
+              margin-top: 20px;
+              font-family: &quot;Fira Code&quot;;
+              color: var(--neon-cyan);
+            "
+          >
+            // Transform your inputs into expert outputs
+          </p>
+
+          <div style="margin-top: 60px; display: flex; gap: 40px">
+            <div class="card">
+              <small style="color: var(--text-muted)">PRESENTER</small><br />
+              <strong>Jirayuth Bank</strong>
+            </div>
+            <div class="card">
+              <small style="color: var(--text-muted)">TARGET</small><br />
+              <strong>Software Developers</strong>
+            </div>
+          </div>
+        </div>
+        <!-- Speaker Notes Content (Hidden) -->
+        <div class="note-content" style="display: none">
+          [Speaker Notes]<br />
+          - สวัสดีทีม Developer ทุกคนครับ<br />
+          - วันนี้เราจะมาเจาะลึกเรื่อง Prompt Engineering กัน<br />
+          - เป้าหมายคือเปลี่ยนจากแค่ "User ที่ใช้งาน AI" เป็น "Engineer
+          ที่ควบคุม AI" ได้อย่างแม่นยำ<br />
+          - ธีมวันนี้คือการเขียน Prompt แบบ Structured เหมือนที่เราเขียน Code
+          ครับ
+        </div>
+      </div>
+
+      <!-- SLIDE 2: Definition -->
+      <div class="slide" id="slide-2">
+        <h2 class="slide-title">MODULE 01: INTRODUCTION</h2>
+        <div class="grid-2">
+          <div>
+            <h3 style="color: var(--neon-cyan); margin-bottom: 20px">
+              AI Prompt Engineering คืออะไร?
+            </h3>
+            <p>
+              คือศาสตร์ในการออกแบบคำสั่ง (Input) เพื่อควบคุม AI ให้สร้างผลลัพธ์
+              (Output) ที่มีคุณภาพและตรงตามความต้องการที่สุด
+            </p>
+            <div style="margin-top: 30px">
+              <div class="code-block">
+                <span class="keyword">function</span>
+                <span class="function">generateOutput</span>(input) {<br />
+                &nbsp;&nbsp;<span class="keyword">if</span> (input.isOptimized)
+                {<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span>
+                <span class="string">"High Quality Result"</span>;<br />
+                &nbsp;&nbsp;} <span class="keyword">else</span> {<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span>
+                <span class="string">"Random Generic Text"</span>;<br />
+                &nbsp;&nbsp;}<br />
+                }
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <h3 style="margin-bottom: 20px">Why It Matters? (ทำไมต้องแคร์)</h3>
+            <ul>
+              <li>
+                <i class="fa-solid fa-bolt" style="color: var(--neon-cyan)"></i>
+                <strong>ลดเวลางานจำเจ:</strong> ใช้ AI เขียน Boilerplate Code,
+                Unit Test หรือสรุป Doc
+              </li>
+              <li>
+                <i
+                  class="fa-solid fa-ruler-combined"
+                  style="color: var(--neon-cyan)"
+                ></i>
+                <strong>ควบคุมมาตรฐาน:</strong> ใช้ System Prompt คุม Coding
+                Style ของทีม
+              </li>
+              <li>
+                <i
+                  class="fa-solid fa-user-ninja"
+                  style="color: var(--neon-cyan)"
+                ></i>
+                <strong>ยกระดับคุณภาพ:</strong> เปลี่ยน AI เป็น Pair Programmer
+                ช่วย Review Code
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="note-content" style="display: none">
+          [Speaker Notes]<br />
+          - Prompt Engineering ไม่ใช่แค่การพิมพ์คุยกับบอท<br />
+          - เปรียบเทียบ: เหมือนเราเขียน Function ครับ ถ้า Input (Parameter) ขยะ
+          Output ก็ขยะ (GIGO)<br />
+          - ประโยชน์หลักๆ สำหรับ Dev คือลดงานถึก (Boilerplate) และช่วยคุม
+          Standard ทีม
+        </div>
+      </div>
+
+      <!-- SLIDE 3: System vs User Prompt -->
+      <div class="slide" id="slide-3">
+        <h2 class="slide-title">THE HIDDEN INSTRUCTION</h2>
+        <div class="grid-2">
+          <div class="card" style="border-top: 4px solid var(--neon-purple)">
+            <div class="icon-box"><i class="fa-solid fa-user-secret"></i></div>
+            <h3>SYSTEM PROMPT</h3>
+            <p
+              style="
+                color: var(--neon-purple);
+                font-family: &quot;Fira Code&quot;;
+              "
+            >
+              The Director (ผู้กำกับ)
+            </p>
+            <hr
+              style="border-color: rgba(255, 255, 255, 0.1); margin: 15px 0"
+            />
+            <ul>
+              <li>กำหนด <strong>Persona</strong> (บทบาท)</li>
+              <li>วาง <strong>Constraints</strong> (กฎเหล็ก/ข้อห้าม)</li>
+              <li>ระบุ <strong>Output Format</strong> (รูปแบบผลลัพธ์)</li>
+            </ul>
+            <p style="font-size: 16px; margin-top: 15px; opacity: 0.7">
+              "User ทั่วไปมองไม่เห็นส่วนนี้ แต่ Dev ต้องเป็นคนเขียน"
+            </p>
+          </div>
+
+          <div class="card" style="border-top: 4px solid var(--neon-cyan)">
+            <div class="icon-box"><i class="fa-solid fa-comment-dots"></i></div>
+            <h3>USER PROMPT</h3>
+            <p
+              style="
+                color: var(--neon-cyan);
+                font-family: &quot;Fira Code&quot;;
+              "
+            >
+              The Actor (นักแสดง)
+            </p>
+            <hr
+              style="border-color: rgba(255, 255, 255, 0.1); margin: 15px 0"
+            />
+            <ul>
+              <li>สั่ง <strong>Task</strong> เฉพาะเจาะจง</li>
+              <li>ใส่ <strong>Input Data</strong></li>
+              <li>ถามคำถามตามสถานการณ์</li>
+            </ul>
+            <p style="font-size: 16px; margin-top: 15px; opacity: 0.7">
+              "คือสิ่งที่พิมพ์ลงไปในช่องแชท"
+            </p>
+          </div>
+        </div>
+        <div class="note-content" style="display: none">
+          [Speaker Notes]<br />
+          - คอนเซปต์สำคัญคือการแยก System vs User<br />
+          - System Prompt คือ "หลังบ้าน" ที่เรา Set ไว้ให้ AI (เช่น "แกคือ
+          Senior Java Dev นะ")<br />
+          - User Prompt คือ "หน้าบ้าน" (เช่น "ช่วยเขียนฟังก์ชั่น Login
+          หน่อย")<br />
+          - ถ้า System แข็งแรง User Prompt จะทำงานง่ายขึ้นมาก
+        </div>
+      </div>
+
+      <!-- SLIDE 4: The 6 Pillars -->
+      <div class="slide" id="slide-4">
+        <h2 class="slide-title">THE 6 PILLARS OF PROMPT</h2>
+        <p style="margin-bottom: 30px">
+          โครงสร้างของ Prompt ที่สมบูรณ์แบบประกอบด้วย 6 ส่วน
+        </p>
+        <div class="grid-3">
+          <div class="card">
+            <div class="icon-box"><i class="fa-solid fa-mask"></i></div>
+            <h4>1. Persona</h4>
+            <p style="font-size: 16px">บทบาทคือใคร? (เช่น Senior Java Dev)</p>
+          </div>
+          <div class="card">
+            <div class="icon-box">
+              <i class="fa-solid fa-map-location-dot"></i>
+            </div>
+            <h4>2. Context</h4>
+            <p style="font-size: 16px">
+              บริบท/พื้นหลัง (เช่น ทำ App E-commerce)
+            </p>
+          </div>
+          <div class="card">
+            <div class="icon-box"><i class="fa-solid fa-list-check"></i></div>
+            <h4>3. Task</h4>
+            <p style="font-size: 16px">
+              งานที่ต้องทำ (เช่น เขียน Function คำนวณภาษี)
+            </p>
+          </div>
+          <div class="card">
+            <div class="icon-box"><i class="fa-solid fa-handcuffs"></i></div>
+            <h4>4. Constraints</h4>
+            <p style="font-size: 16px">
+              ข้อห้าม/กฎ (เช่น ห้ามใช้ Library ภายนอก)
+            </p>
+          </div>
+          <div class="card">
+            <div class="icon-box"><i class="fa-solid fa-file-code"></i></div>
+            <h4>5. Format</h4>
+            <p style="font-size: 16px">รูปแบบผลลัพธ์ (เช่น JSON, Markdown)</p>
+          </div>
+          <div class="card">
+            <div class="icon-box"><i class="fa-solid fa-images"></i></div>
+            <h4>6. Example</h4>
+            <p style="font-size: 16px">ตัวอย่าง (Few-shot Learning)</p>
+          </div>
+        </div>
+        <div class="note-content" style="display: none">
+          [Speaker Notes]<br />
+          - จำเลข 6 นี้ไว้ครับ เวลาเขียน Prompt เช็คให้ครบ<br />
+          - Persona: สวมหมวกให้ AI เก่งขึ้น<br />
+          - Context: บอกบริบทงาน<br />
+          - Task: สั่งให้ชัด<br />
+          - Constraints: สำคัญมากสำหรับ Dev เช่น "ขอโค้ด Clean Code, ห้ามใช้
+          Deprecated funcs"<br />
+          - Format: อยากได้ JSON หรือ SQL<br />
+          - Example: ให้ตัวอย่าง Input -> Output
+        </div>
+      </div>
+
+      <!-- SLIDE 5: Bad vs Good Example -->
+      <div class="slide" id="slide-5">
+        <h2 class="slide-title">CASE STUDY: FROM BAD TO GOOD</h2>
+        <div class="grid-2">
+          <div
+            class="card"
+            style="border: 1px solid #ff4444; background: rgba(50, 10, 10, 0.4)"
+          >
+            <h3 style="color: #ff4444; margin-bottom: 15px">
+              <i class="fa-solid fa-circle-xmark"></i> BAD PROMPT
+            </h3>
+            <p>"เขียนฟังก์ชั่นลดราคาให้หน่อย"</p>
+            <div class="code-block" style="font-size: 12px; margin-top: 10px">
+              <span class="comment"># Output ที่ได้อาจจะมั่วภาษา</span><br />
+              def discount(p, d):<br />
+              &nbsp;&nbsp;return p - d
+            </div>
+            <ul style="margin-top: 10px; font-size: 16px">
+              <li>❌ ไม่ระบุภาษา (Python/JS?)</li>
+              <li>❌ ไม่มี Logic ธุรกิจ</li>
+              <li>❌ ขาด Error Handling</li>
+            </ul>
+          </div>
+
+          <div
+            class="card"
+            style="
+              border: 1px solid var(--neon-green);
+              background: rgba(10, 50, 20, 0.4);
+            "
+          >
+            <h3 style="color: var(--neon-green); margin-bottom: 15px">
+              <i class="fa-solid fa-circle-check"></i> GOOD PROMPT
+            </h3>
+            <p style="font-size: 14px">
+              <strong>Persona:</strong> Senior Node.js Dev<br /><strong
+                >Task:</strong
+              >
+              ฟังก์ชั่น calculateFinalPrice<br /><strong>Constraint:</strong>
+              Gold ลด 10%, Silver ลด 5%, เช็คค่าติดลบ
+            </p>
+            <div class="code-block" style="font-size: 12px; margin-top: 10px">
+              <span class="keyword">const</span> calculateFinalPrice = (price,
+              tier) => {<br />
+              &nbsp;&nbsp;<span class="keyword">if</span> (price < 0)
+              <span class="keyword">throw</span>
+              <span class="keyword">new</span> Error(<span class="string"
+                >"Invalid"</span
+              >);<br />
+              &nbsp;&nbsp;<span class="keyword">const</span> discount = tier ===
+              <span class="string">'Gold'</span> ? 0.1 : 0.05;<br />
+              &nbsp;&nbsp;<span class="keyword">return</span> price * (1 -
+              discount);<br />
+              };
+            </div>
+          </div>
+        </div>
+        <div class="note-content" style="display: none">
+          [Speaker Notes]<br />
+          - ดูความต่างนะครับ<br />
+          - Bad Prompt: สั้นเกินไป AI ต้องเดาใจเรา<br />
+          - Good Prompt: ระบุ Logic, ภาษา, และเงื่อนไข Error Handling ชัดเจน<br />
+          - ผลลัพธ์ที่ได้คือนำไปใช้ได้จริง (Production Ready)
+        </div>
+      </div>
+
+      <!-- SLIDE 6: Chain of Thought -->
+      <div class="slide" id="slide-6">
+        <h2 class="slide-title">ADVANCED: CHAIN-OF-THOUGHT (CoT)</h2>
+        <div class="grid-2">
+          <div>
+            <h3 style="color: var(--neon-cyan)">System 2 Thinking</h3>
+            <p>
+              การบังคับให้ AI "คิดที่ละขั้นตอน" (Step-by-step)
+              ก่อนที่จะให้คำตอบสุดท้าย ช่วยลดอาการ Hallucination (มั่วข้อมูล)
+              ได้อย่างมหาศาล
+            </p>
+            <br />
+            <div class="card" style="border-left: 4px solid var(--neon-purple)">
+              <h4>
+                <i class="fa-solid fa-wand-magic-sparkles"></i> The Magic Phrase
+              </h4>
+              <p style="font-size: 24px; color: white; margin-top: 10px">
+                "Let's think step by step"
+              </p>
+              <p style="font-size: 16px">
+                หรือ "อธิบาย Logic การทำงานก่อนเริ่มเขียน Code"
+              </p>
+            </div>
+          </div>
+          <div class="card">
+            <h4>Use Cases for Developers</h4>
+            <ul style="margin-top: 20px">
+              <li style="margin-bottom: 20px">
+                <strong>Debugging:</strong> ให้ AI ไล่ Flow ของ Bug ทีละบรรทัด
+              </li>
+              <li style="margin-bottom: 20px">
+                <strong>Refactoring:</strong> ให้วิเคราะห์ Complexity (Big O)
+                ก่อนแก้โค้ด
+              </li>
+              <li>
+                <strong>System Design:</strong> ให้ออกแบบ Database Schema
+                โดยไล่ความสัมพันธ์ทีละ Table
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="note-content" style="display: none">
+          [Speaker Notes]<br />
+          - เทคนิคขั้นสูงครับ เรียกว่า CoT (Chain of Thought)<br />
+          - ปกติ AI จะรีบตอบ (System 1) ทำให้มั่วได้ง่าย<br />
+          - ถ้าเราสั่ง "คิดทีละสเต็ปนะ" (System 2) AI จะค่อยๆ แตก Logic ออกมา<br />
+          - เหมาะมากเวลาให้ช่วย Debug หรือออกแบบ Architecture
+        </div>
+      </div>
+
+      <!-- SLIDE 7: Iterative Workflow -->
+      <div class="slide" id="slide-7">
+        <h2 class="slide-title">THE ITERATIVE WORKFLOW</h2>
+        <p style="text-align: center; margin-bottom: 40px">
+          Prompt Engineering ไม่ใช่การร่ายเวทมนตร์ครั้งเดียวจบ แต่คือ Loop
+          ของการพัฒนา
+        </p>
+
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+          "
+        >
+          <div class="card" style="text-align: center; width: 22%">
+            <div
+              style="
+                font-size: 40px;
+                color: var(--neon-cyan);
+                margin-bottom: 10px;
+              "
+            >
+              1
+            </div>
+            <h4>Draft</h4>
+            <small>ร่าง Prompt แรก</small>
+          </div>
+          <i
+            class="fa-solid fa-arrow-right"
+            style="color: var(--text-muted)"
+          ></i>
+
+          <div class="card" style="text-align: center; width: 22%">
+            <div
+              style="
+                font-size: 40px;
+                color: var(--neon-cyan);
+                margin-bottom: 10px;
+              "
+            >
+              2
+            </div>
+            <h4>Test</h4>
+            <small>ลองรันกับ AI</small>
+          </div>
+          <i
+            class="fa-solid fa-arrow-right"
+            style="color: var(--text-muted)"
+          ></i>
+
+          <div class="card" style="text-align: center; width: 22%">
+            <div
+              style="
+                font-size: 40px;
+                color: var(--neon-purple);
+                margin-bottom: 10px;
+              "
+            >
+              3
+            </div>
+            <h4>Analyze</h4>
+            <small>วิเคราะห์ข้อผิดพลาด</small>
+          </div>
+          <i
+            class="fa-solid fa-arrow-right"
+            style="color: var(--text-muted)"
+          ></i>
+
+          <div
+            class="card"
+            style="
+              text-align: center;
+              width: 22%;
+              border-color: var(--neon-green);
+            "
+          >
+            <div
+              style="
+                font-size: 40px;
+                color: var(--neon-green);
+                margin-bottom: 10px;
+              "
+            >
+              4
+            </div>
+            <h4>Refine</h4>
+            <small>เพิ่ม Constraints</small>
+          </div>
+        </div>
+
+        <div
+          class="card"
+          style="
+            margin-top: 40px;
+            text-align: center;
+            background: rgba(0, 243, 255, 0.05);
+          "
+        >
+          <p style="margin: 0">
+            <strong>Goal:</strong> เปลี่ยน Prompt ที่ดี ให้กลายเป็น
+            <strong>Reusable Asset</strong> ของทีม
+          </p>
+        </div>
+        <div class="note-content" style="display: none">
+          [Speaker Notes]<br />
+          - อย่าคาดหวังว่าพิมพ์ครั้งแรกจะเพอร์เฟกต์<br />
+          - มันคือ Loop: เขียน -> ลอง -> ดูผล -> แก้<br />
+          - ถ้า Prompt ไหนเวิร์ค ให้เก็บไว้เป็น Template (Asset) ของทีมครับ
+        </div>
+      </div>
+
+      <!-- SLIDE 8: Workshop 1 -->
+      <div class="slide" id="slide-8">
+        <h2 class="slide-title">WORKSHOP 01: NAMING CONVENTION</h2>
+        <div class="grid-2">
+          <div>
+            <h3 style="color: var(--neon-cyan)">Scenario</h3>
+            <p>
+              <strong>Role:</strong> Senior Software Engineer<br />
+              <strong>Situation:</strong> ต้องการตั้งชื่อตัวแปร Java สำหรับเก็บ
+              "ประวัติการดูสินค้าของผู้ใช้เมื่อวานนี้"<br />
+              <strong>Constraint:</strong> CamelCase, สื่อความหมายชัดเจน, ขอ 5
+              ตัวเลือก
+            </p>
+
+            <div
+              class="code-block"
+              style="margin-top: 20px; border-color: #ff4444"
+            >
+              <span class="comment">// BAD PROMPT</span><br />
+              "ช่วยตั้งชื่อตัวแปรให้หน่อย"
+            </div>
+          </div>
+          <div class="card">
+            <h3 style="color: var(--neon-green)">Expected Output</h3>
+            <div class="code-block" style="background: black">
+              1. userYesterdayViewingHistory<br />
+              2. dailyProductViewList<br />
+              3. previousDayBrowsingLog<br />
+              4. yesterdayItemViews<br />
+              5. lastDayUserActivityLog
+            </div>
+            <p
+              style="
+                font-size: 14px;
+                margin-top: 10px;
+                color: var(--text-muted);
+              "
+            >
+              สังเกตว่าชื่อตัวแปรอ่านรู้เรื่องทันที ไม่ต้องเดา (Clean Code)
+            </p>
+          </div>
+        </div>
+        <div class="note-content" style="display: none">
+          [Speaker Notes]<br />
+          - มาลอง Workshop แรกครับ เรื่องที่ยากที่สุดของ Dev...
+          การตั้งชื่อตัวแปร<br />
+          - ถ้าเราบรีฟ AI ดีๆ ว่าขอ CamelCase และสื่อความหมายถึง "เมื่อวาน"<br />
+          - เราจะได้ชื่อที่เอาไปใช้ได้เลย ไม่ต้องมานั่งนึกเอง
+        </div>
+      </div>
+
+      <!-- SLIDE 9: Workshop 2 -->
+      <div class="slide" id="slide-9">
+        <h2 class="slide-title">WORKSHOP 02: COMMUNICATION</h2>
+        <div class="grid-2">
+          <div>
+            <h3 style="color: var(--neon-cyan)">Scenario</h3>
+            <p>
+              <strong>Role:</strong> IT Support Manager<br />
+              <strong>Situation:</strong> ระบบล่มเพราะ Database Deadlock นาน 1
+              ชม.<br />
+              <strong>Task:</strong> ร่างอีเมลแจ้งลูกค้าทั่วไป (Non-tech)<br />
+              <strong>Constraint:</strong> ห้ามใช้ศัพท์เทคนิค,
+              ใช้การเปรียบเปรยเรื่อง "คนแย่งกันเข้าประตูร้าน"
+            </p>
+          </div>
+          <div class="card">
+            <h3 style="color: var(--neon-green)">Expected Output</h3>
+            <div
+              style="
+                background: #fff;
+                color: #333;
+                padding: 15px;
+                border-radius: 4px;
+                font-family: sans-serif;
+                font-size: 16px;
+              "
+            >
+              <strong>Subject:</strong>
+              คำชี้แจงและขออภัยกรณีระบบสั่งซื้อขัดข้อง<br /><br />
+              เรียน ลูกค้าผู้มีอุปการคุณ,<br /><br />
+              ทางเราขออภัยในความไม่สะดวก...
+              ปัญหาที่เกิดขึ้นเปรียบเสมือนลูกค้าจำนวนมากพยายามเบียดเสียดกันเข้าประตูร้านเพียงบานเดียวพร้อมกัน
+              ทำให้เกิดความล่าช้า...
+            </div>
+          </div>
+        </div>
+        <div class="note-content" style="display: none">
+          [Speaker Notes]<br />
+          - โจทย์นี้คือ Soft Skill ครับ<br />
+          - Dev มักพูดภาษาเทพที่ลูกค้าไม่เข้าใจ<br />
+          - ให้ AI รับบทเป็น Manager และสั่ง Constraint ห้ามใช้ Jargon<br />
+          - ผลลัพธ์คืออีเมลที่สุภาพและเข้าใจง่าย
+        </div>
+      </div>
+
+      <!-- SLIDE 10: Workshop 3 -->
+      <div class="slide" id="slide-10">
+        <h2 class="slide-title">WORKSHOP 03: DATA GENERATION</h2>
+        <div class="grid-2">
+          <div>
+            <h3 style="color: var(--neon-cyan)">Scenario</h3>
+            <p>
+              <strong>Role:</strong> QA Engineer<br />
+              <strong>Task:</strong> สร้าง Mock Data สำหรับเทสหน้า
+              "สินค้าแนะนำ"<br />
+              <strong>Requirements:</strong><br />
+              - MySQL INSERT Statement<br />
+              - 5 รายการ<br />
+              - คละหมวดหมู่ (Electronics, Fashion)<br />
+              - ราคาเป็นทศนิยม 2 ตำแหน่ง
+            </p>
+          </div>
+          <div class="card">
+            <h3 style="color: var(--neon-green)">Expected Output</h3>
+            <div class="code-block">
+              <span class="keyword">INSERT INTO</span> products (id, name,
+              category, price) <span class="keyword">VALUES</span><br />
+              (1, <span class="string">'Wireless Headphones'</span>,
+              <span class="string">'Electronics'</span>, 159.99),<br />
+              (2, <span class="string">'Slim Fit Jeans'</span>,
+              <span class="string">'Fashion'</span>, 49.50),<br />
+              (3, <span class="string">'Smart Watch Gen 5'</span>,
+              <span class="string">'Electronics'</span>, 299.00),<br />
+              (4, <span class="string">'Running Shoes'</span>,
+              <span class="string">'Fashion'</span>, 89.99),<br />
+              (5, <span class="string">'4K Monitor'</span>,
+              <span class="string">'Electronics'</span>, 349.50);
+            </div>
+          </div>
+        </div>
+        <div class="note-content" style="display: none">
+          [Speaker Notes]<br />
+          - งานถึกของ QA/Dev คือการเตรียม Data<br />
+          - สั่ง AI เจาะจงไปเลยว่าขอ SQL Insert, ขอ Data type แบบไหน<br />
+          - ก๊อปไปวางใน Database ได้เลย ประหยัดเวลาไป 10-20 นาที
+        </div>
+      </div>
+
+      <!-- SLIDE 11: Recap -->
+      <div class="slide" id="slide-11">
+        <h2 class="slide-title">FINAL CHECKLIST</h2>
+        <p style="text-align: center; margin-bottom: 30px">
+          ก่อนกด Enter ส่ง Prompt ลองเช็คลิสต์นี้ดูครับ
+        </p>
+
+        <div class="grid-2" style="max-width: 900px; margin: 0 auto">
+          <div class="card" style="border-left: 4px solid var(--neon-cyan)">
+            <h3><i class="fa-solid fa-list-check"></i> Prompt Structure</h3>
+            <ul style="margin-top: 15px">
+              <li>[ ] กำหนด <strong>Persona</strong> แล้วหรือยัง?</li>
+              <li>[ ] ให้ <strong>Context</strong> ครบถ้วนไหม?</li>
+              <li>[ ] ระบุ <strong>Format</strong> Output ชัดเจน?</li>
+            </ul>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--neon-purple)">
+            <h3><i class="fa-solid fa-sliders"></i> Optimization</h3>
+            <ul style="margin-top: 15px">
+              <li>[ ] ใส่ <strong>Constraints</strong> (ข้อห้าม) หรือยัง?</li>
+              <li>[ ] มี <strong>Example</strong> (Few-shot) ให้ดูไหม?</li>
+              <li>
+                [ ] ใช้เทคนิค <strong>Step-by-step</strong> (CoT) หรือยัง?
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="note-content" style="display: none">
+          [Speaker Notes]<br />
+          - สรุปสุดท้ายครับ Checklist ก่อนยิง Prompt<br />
+          - อย่าลืม Persona, Context, Constraints<br />
+          - ถ้าทำครบตามนี้ รับรองว่า Output ที่ได้จะมีคุณภาพระดับมืออาชีพแน่นอน
+        </div>
+      </div>
+
+      <!-- SLIDE 12: Q&A -->
+      <div class="slide" id="slide-12">
+        <div
+          style="
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+          "
+        >
+          <h1 style="font-size: 100px; margin-bottom: 20px">Q & A</h1>
+          <p
+            style="
+              color: var(--neon-cyan);
+              font-family: &quot;Fira Code&quot;;
+              font-size: 24px;
+            "
+          >
+            // Session Terminated
+          </p>
+
+          <div
+            class="code-block"
+            style="margin-top: 50px; display: inline-block"
+          >
+            > shutdown -h now<br />
+            > System halted.<br />
+            > Thank you!
+          </div>
+        </div>
+        <div class="note-content" style="display: none">
+          [Speaker Notes]<br />
+          - ช่วงถามตอบครับ มีใครสงสัยตรงไหน หรืออยากแชร์ประสบการณ์ Prompt แปลกๆ
+          เชิญได้เลยครับ<br />
+          - ขอบคุณครับ
+        </div>
+      </div>
+    </div>
+
+    <!-- UI Controls -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <div class="notes-panel" id="notesPanel">
+      <div class="notes-header">📝 SPEAKER NOTES</div>
+      <div id="notesText">No notes for this slide.</div>
+    </div>
+
+    <div class="controls">
+      <button class="btn" onclick="toggleNotes()">📝 Notes</button>
+      <button class="btn" onclick="prevSlide()">❮ Prev</button>
+      <button class="btn" onclick="nextSlide()">Next ❯</button>
+    </div>
+
+    <script>
+      let currentSlide = 1;
+      const totalSlides = 12;
+
+      function showSlide(n) {
+        // Hide all slides
+        document
+          .querySelectorAll(".slide")
+          .forEach((s) => s.classList.remove("active"));
+
+        // Loop logic
+        if (n > totalSlides) currentSlide = 1;
+        if (n < 1) currentSlide = totalSlides;
+
+        // Show current
+        document
+          .getElementById(`slide-${currentSlide}`)
+          .classList.add("active");
+
+        // Update Progress
+        const progress = (currentSlide / totalSlides) * 100;
+        document.getElementById("progressBar").style.width = `${progress}%`;
+
+        // Update Notes
+        updateNotes();
+      }
+
+      function nextSlide() {
+        currentSlide++;
+        showSlide(currentSlide);
+      }
+
+      function prevSlide() {
+        currentSlide--;
+        showSlide(currentSlide);
+      }
+
+      function toggleNotes() {
+        const panel = document.getElementById("notesPanel");
+        panel.classList.toggle("visible");
+        updateNotes();
+      }
+
+      function updateNotes() {
+        const activeSlide = document.querySelector(".slide.active");
+        const noteContent = activeSlide.querySelector(".note-content");
+        const notesText = document.getElementById("notesText");
+
+        if (noteContent) {
+          notesText.innerHTML = noteContent.innerHTML;
+        } else {
+          notesText.innerText = "No notes available for this slide.";
+        }
+      }
+
+      // Keyboard navigation
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight") nextSlide();
+        if (e.key === "ArrowLeft") prevSlide();
+      });
+
+      // Initialize
+      showSlide(1);
+    </script>
+  </body>
+</html>

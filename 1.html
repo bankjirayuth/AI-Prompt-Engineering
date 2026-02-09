@@ -1,0 +1,197 @@
+<!doctype html>
+
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>AI Prompt Engineering</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&amp;family=Kanit:wght@300;400;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #0f172a;
+        /* Slate 900 */
+      }
+
+      .slide-container {
+        width: 1280px;
+        height: 720px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+      }
+
+      .thai-font {
+        font-family: "Kanit", sans-serif;
+      }
+
+      .code-font {
+        font-family: "JetBrains Mono", monospace;
+      }
+
+      /* Imitate gradient using absolute positioned elements with blur since CSS gradients are restricted */
+      .glow-blob-1 {
+        position: absolute;
+        width: 600px;
+        height: 600px;
+        background-color: #0ea5e9;
+        /* Sky 500 */
+        border-radius: 50%;
+        filter: blur(120px);
+        opacity: 0.2;
+        top: -200px;
+        right: -100px;
+        z-index: 0;
+      }
+
+      .glow-blob-2 {
+        position: absolute;
+        width: 500px;
+        height: 500px;
+        background-color: #10b981;
+        /* Emerald 500 */
+        border-radius: 50%;
+        filter: blur(100px);
+        opacity: 0.15;
+        bottom: -150px;
+        left: -100px;
+        z-index: 0;
+      }
+
+      .glass-panel {
+        background-color: rgba(30, 41, 59, 0.7);
+        /* Slate 800 with opacity */
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow:
+          0 4px 6px -1px rgba(0, 0, 0, 0.1),
+          0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      }
+
+      .grid-bg {
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 40px 40px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        opacity: 0.3;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="slide-container text-white">
+      <!-- Background Elements -->
+      <div class="grid-bg"></div>
+      <div class="glow-blob-1"></div>
+      <div class="glow-blob-2"></div>
+      <!-- Background Image Overlay for Tech Texture -->
+      <img
+        alt="Code Background"
+        class="absolute inset-0 w-full h-full object-cover opacity-10 mix-blend-overlay z-0"
+        src="https://page.gensparksite.com/slides_images/d78c291356203ff708c10d3c66a634c3.webp"
+      />
+      <!-- Main Content Wrapper -->
+      <div class="relative z-10 flex flex-col justify-center h-full px-20">
+        <!-- Top Tag -->
+        <div class="flex items-center space-x-3 mb-6">
+          <div
+            class="px-3 py-1 bg-green-500 bg-opacity-20 border border-green-500 rounded-md"
+          >
+            <p
+              class="text-green-400 text-sm font-bold tracking-wider uppercase code-font"
+            >
+              <i class="fas fa-terminal mr-2"></i>Internal Technical Presentation
+            </p>
+          </div>
+          <div class="h-px w-20 bg-gray-700"></div>
+        </div>
+        <!-- Title Section -->
+        <div class="mb-4">
+          <h1 class="text-7xl font-extrabold tracking-tight leading-tight mb-2">
+            <span class="text-white">AI Prompt</span><br />
+            <span class="text-transparent bg-clip-text" style="color: #22d3ee"
+              >Engineering</span
+            >
+            
+          </h1>
+        </div>
+        <!-- Subtitle -->
+        <div class="mb-12 max-w-3xl">
+          <p
+            class="text-2xl text-gray-300 thai-font font-light leading-relaxed border-l-4 border-green-500 pl-6"
+          >
+            เขียน Prompt อย่างไรให้ได้ผลลัพธ์ตามที่ต้องการ
+          </p>
+          <p class="text-sm text-gray-500 mt-2 pl-6 code-font opacity-70">
+            // Transform your inputs into the right outputs
+          </p>
+        </div>
+        <!-- Presenter Info -->
+        <div class="flex items-center space-x-6 mt-8">
+          <div
+            class="glass-panel rounded-xl p-4 flex items-center space-x-4 pr-8"
+          >
+            <div
+              class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-green-500 flex items-center justify-center text-xl font-bold shadow-lg text-white"
+            >
+              <i class="fas fa-user"></i>
+            </div>
+            <div>
+              <p class="text-xs text-gray-400 uppercase tracking-widest mb-1">
+                Present by
+              </p>
+              <p class="text-lg font-bold text-white thai-font">
+                Jirayuth Dokkathin | Bank
+              </p>
+            </div>
+          </div>
+          <!-- Date/Meta -->
+          <div
+            class="flex flex-col space-y-1 text-gray-400 text-sm code-font border-l border-gray-700 pl-6"
+          >
+            <p>
+              <i class="fas fa-calendar-alt mr-2 text-blue-400"></i>Date: 10-02-2026
+            </p>
+            <p><i class="fas fa-clock mr-2 text-green-400"></i>Duration: 1.30-2.00 Hours</p>
+          </div>
+        </div>
+      </div>
+      <!-- Decorative Code Snippet Bottom Right -->
+      <div class="absolute bottom-10 right-10 opacity-30 pointer-events-none">
+        <pre class="text-xs text-green-400 code-font">
+const prompt = {
+  role: "AppDev Developer",
+  task: "Optimize Workflow",
+  result: "High Efficiency"
+};
+            </pre
+        >
+      </div>
+      <!-- Decorative Elements -->
+      <div class="absolute top-10 right-10 text-gray-800 opacity-20 text-9xl">
+        <i class="fas fa-robot"></i>
+      </div>
+    </div>
+  </body>
+</html>

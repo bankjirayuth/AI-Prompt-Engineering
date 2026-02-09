@@ -1,0 +1,369 @@
+<!doctype html>
+
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Common Prompt Engineering Pitfalls</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&amp;family=Kanit:wght@300;400;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #0f172a;
+      }
+
+      .slide-container {
+        width: 1280px;
+        height: 720px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+      }
+
+      .thai-font {
+        font-family: "Kanit", sans-serif;
+      }
+
+      .code-font {
+        font-family: "JetBrains Mono", monospace;
+      }
+
+      .glow-blob-red {
+        position: absolute;
+        width: 700px;
+        height: 700px;
+        background-color: #ef4444;
+        border-radius: 50%;
+        filter: blur(120px);
+        opacity: 0.1;
+        top: -200px;
+        left: -100px;
+        z-index: 0;
+      }
+
+      .glow-blob-orange {
+        position: absolute;
+        width: 600px;
+        height: 600px;
+        background-color: #f97316;
+        border-radius: 50%;
+        filter: blur(100px);
+        opacity: 0.1;
+        bottom: -200px;
+        right: -100px;
+        z-index: 0;
+      }
+
+      .glass-panel {
+        background-color: rgba(30, 41, 59, 0.6);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+
+      .grid-bg {
+        background-image: linear-gradient(
+            rgba(255, 255, 255, 0.03) 1px,
+            transparent 1px
+          ),
+          linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.03) 1px,
+            transparent 1px
+          );
+        background-size: 40px 40px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        opacity: 0.3;
+      }
+
+      .pitfall-card {
+        transition: all 0.3s ease;
+      }
+
+      .pitfall-card:hover {
+        transform: translateY(-3px);
+        background-color: rgba(30, 41, 59, 0.8);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="slide-container text-white">
+      <!-- Background Elements -->
+      <div class="grid-bg"></div>
+      <div class="glow-blob-red"></div>
+      <div class="glow-blob-orange"></div>
+
+      <!-- Header -->
+      <div
+        class="relative z-10 px-16 pt-8 pb-3 flex justify-between items-end"
+      >
+        <div>
+          <div class="flex items-center space-x-3 mb-2">
+            <span
+              class="text-red-400 code-font text-sm font-bold tracking-wider uppercase"
+              >Avoid These</span
+            >
+            <div class="h-px w-10 bg-gray-700"></div>
+          </div>
+          <h1 class="text-4xl font-bold thai-font tracking-tight text-white">
+            Common <span class="text-red-400">Pitfalls</span> to Avoid
+          </h1>
+        </div>
+        <div class="text-right">
+          <p class="text-gray-400 text-sm code-font">Module 02: Framework</p>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="relative z-10 flex-1 px-16 py-4 flex flex-col gap-4">
+        <!-- Pitfalls Grid -->
+        <div class="grid grid-cols-2 gap-4">
+          <!-- Pitfall 1: Being Too Vague -->
+          <div
+            class="pitfall-card glass-panel rounded-xl p-4 border-l-4 border-red-500"
+          >
+            <div class="flex items-start space-x-4">
+              <div
+                class="w-10 h-10 rounded-lg flex items-center justify-center text-red-400 shrink-0"
+                style="background-color: rgba(239, 68, 68, 0.15)"
+              >
+                <i class="fas fa-cloud-fog text-lg"></i>
+              </div>
+              <div class="flex-1">
+                <h3 class="font-bold text-red-300 code-font text-sm mb-1">
+                  1. Being Too Vague
+                </h3>
+                <p class="text-xs text-gray-400 thai-font leading-relaxed mb-2">
+                  Prompt กว้างเกินไป ได้ผลลัพธ์ที่ไม่ตรงจุดหรือตื้นเกินไป
+                </p>
+                <div class="flex gap-2 text-xs">
+                  <span
+                    class="bg-red-900 bg-opacity-30 text-red-300 px-2 py-1 rounded code-font"
+                    >❌ "เขียนโค้ดให้หน่อย"</span
+                  >
+                  <span
+                    class="bg-green-900 bg-opacity-30 text-green-300 px-2 py-1 rounded code-font"
+                    >✅ "เขียน JS function สำหรับ sort array"</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pitfall 2: Overloading Prompt -->
+          <div
+            class="pitfall-card glass-panel rounded-xl p-4 border-l-4 border-orange-500"
+          >
+            <div class="flex items-start space-x-4">
+              <div
+                class="w-10 h-10 rounded-lg flex items-center justify-center text-orange-400 shrink-0"
+                style="background-color: rgba(249, 115, 22, 0.15)"
+              >
+                <i class="fas fa-layer-group text-lg"></i>
+              </div>
+              <div class="flex-1">
+                <h3 class="font-bold text-orange-300 code-font text-sm mb-1">
+                  2. Overloading with Tasks
+                </h3>
+                <p class="text-xs text-gray-400 thai-font leading-relaxed mb-2">
+                  ยัดหลายงานในคำสั่งเดียว ทำให้ AI สับสนและคุณภาพต่ำ
+                </p>
+                <div class="flex gap-2 text-xs">
+                  <span
+                    class="bg-red-900 bg-opacity-30 text-red-300 px-2 py-1 rounded code-font"
+                    >❌ "สร้าง API + DB + Test + Deploy"</span
+                  >
+                  <span
+                    class="bg-green-900 bg-opacity-30 text-green-300 px-2 py-1 rounded code-font"
+                    >✅ แยกเป็น 4 prompts</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pitfall 3: Ignoring Context -->
+          <div
+            class="pitfall-card glass-panel rounded-xl p-4 border-l-4 border-yellow-500"
+          >
+            <div class="flex items-start space-x-4">
+              <div
+                class="w-10 h-10 rounded-lg flex items-center justify-center text-yellow-400 shrink-0"
+                style="background-color: rgba(251, 191, 36, 0.15)"
+              >
+                <i class="fas fa-puzzle-piece text-lg"></i>
+              </div>
+              <div class="flex-1">
+                <h3 class="font-bold text-yellow-300 code-font text-sm mb-1">
+                  3. Ignoring Context
+                </h3>
+                <p class="text-xs text-gray-400 thai-font leading-relaxed mb-2">
+                  ไม่ให้ข้อมูลพื้นหลัง AI จึงตอบกว้างๆ ไม่ตรงกับ use case
+                </p>
+                <div class="flex gap-2 text-xs">
+                  <span
+                    class="bg-red-900 bg-opacity-30 text-red-300 px-2 py-1 rounded code-font"
+                    >❌ "แก้ bug นี้หน่อย"</span
+                  >
+                  <span
+                    class="bg-green-900 bg-opacity-30 text-green-300 px-2 py-1 rounded code-font"
+                    >✅ "ใน React + TypeScript..."</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pitfall 4: No Output Format -->
+          <div
+            class="pitfall-card glass-panel rounded-xl p-4 border-l-4 border-purple-500"
+          >
+            <div class="flex items-start space-x-4">
+              <div
+                class="w-10 h-10 rounded-lg flex items-center justify-center text-purple-400 shrink-0"
+                style="background-color: rgba(139, 92, 246, 0.15)"
+              >
+                <i class="fas fa-file-alt text-lg"></i>
+              </div>
+              <div class="flex-1">
+                <h3 class="font-bold text-purple-300 code-font text-sm mb-1">
+                  4. Not Specifying Format
+                </h3>
+                <p class="text-xs text-gray-400 thai-font leading-relaxed mb-2">
+                  ไม่บอกรูปแบบผลลัพธ์ ได้ output ที่ใช้งานยาก
+                </p>
+                <div class="flex gap-2 text-xs">
+                  <span
+                    class="bg-red-900 bg-opacity-30 text-red-300 px-2 py-1 rounded code-font"
+                    >❌ "ให้ข้อมูล users"</span
+                  >
+                  <span
+                    class="bg-green-900 bg-opacity-30 text-green-300 px-2 py-1 rounded code-font"
+                    >✅ "ให้เป็น JSON array"</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pitfall 5: Not Iterating -->
+          <div
+            class="pitfall-card glass-panel rounded-xl p-4 border-l-4 border-blue-500"
+          >
+            <div class="flex items-start space-x-4">
+              <div
+                class="w-10 h-10 rounded-lg flex items-center justify-center text-blue-400 shrink-0"
+                style="background-color: rgba(59, 130, 246, 0.15)"
+              >
+                <i class="fas fa-hand-paper text-lg"></i>
+              </div>
+              <div class="flex-1">
+                <h3 class="font-bold text-blue-300 code-font text-sm mb-1">
+                  5. Expecting Perfect First Try
+                </h3>
+                <p class="text-xs text-gray-400 thai-font leading-relaxed mb-2">
+                  คาดหวังผลลัพธ์สมบูรณ์ตั้งแต่ครั้งแรก ไม่ปรับปรุง Prompt
+                </p>
+                <div class="flex gap-2 text-xs">
+                  <span
+                    class="bg-red-900 bg-opacity-30 text-red-300 px-2 py-1 rounded code-font"
+                    >❌ "ใช้ Prompt เดิมซ้ำๆ"</span
+                  >
+                  <span
+                    class="bg-green-900 bg-opacity-30 text-green-300 px-2 py-1 rounded code-font"
+                    >✅ Draft → Refine → Loop</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pitfall 6: Not Validating -->
+          <div
+            class="pitfall-card glass-panel rounded-xl p-4 border-l-4 border-cyan-500"
+          >
+            <div class="flex items-start space-x-4">
+              <div
+                class="w-10 h-10 rounded-lg flex items-center justify-center text-cyan-400 shrink-0"
+                style="background-color: rgba(6, 182, 212, 0.15)"
+              >
+                <i class="fas fa-check-double text-lg"></i>
+              </div>
+              <div class="flex-1">
+                <h3 class="font-bold text-cyan-300 code-font text-sm mb-1">
+                  6. Not Validating Output
+                </h3>
+                <p class="text-xs text-gray-400 thai-font leading-relaxed mb-2">
+                  เชื่อ AI 100% โดยไม่ตรวจสอบ อาจได้ข้อมูลผิดหรือ Hallucination
+                </p>
+                <div class="flex gap-2 text-xs">
+                  <span
+                    class="bg-red-900 bg-opacity-30 text-red-300 px-2 py-1 rounded code-font"
+                    >❌ Copy-Paste ทันที</span
+                  >
+                  <span
+                    class="bg-green-900 bg-opacity-30 text-green-300 px-2 py-1 rounded code-font"
+                    >✅ Review & Test ก่อน</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Warning -->
+        <div
+          class="mt-2 glass-panel rounded-xl p-4 border border-red-500 border-opacity-30"
+          style="background-color: rgba(239, 68, 68, 0.05)"
+        >
+          <div class="flex items-center space-x-4">
+            <div class="text-red-400 text-2xl">
+              <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div>
+              <p class="text-gray-300 thai-font text-sm">
+                <span class="text-red-400 font-bold">Remember:</span> AI ไม่ใช่
+                Magic ✨ — ผลลัพธ์ขึ้นอยู่กับคุณภาพของ Input (Garbage In,
+                Garbage Out) และ AI อาจ
+                <span class="text-yellow-400">"Hallucinate"</span>
+                ข้อมูลที่ไม่ถูกต้องได้
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div
+        class="absolute bottom-6 right-8 text-gray-600 code-font text-xs flex items-center space-x-4"
+      >
+        <span>AI Prompt Engineering</span>
+        <span class="w-px h-3 bg-gray-700"></span>
+        <span class="text-gray-500">2026</span>
+        <span class="w-px h-3 bg-gray-700"></span>
+        <span class="text-green-500 font-bold">4b</span>
+      </div>
+    </div>
+  </body>
+</html>

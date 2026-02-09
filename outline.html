@@ -1,0 +1,261 @@
+<!doctype html>
+
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Session Outline</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&amp;family=Kanit:wght@300;400;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #0f172a;
+      }
+
+      .slide-container {
+        width: 1280px;
+        height: 720px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+      }
+
+      .thai-font {
+        font-family: "Kanit", sans-serif;
+      }
+
+      .code-font {
+        font-family: "JetBrains Mono", monospace;
+      }
+
+      .glow-blob-blue {
+        position: absolute;
+        width: 600px;
+        height: 600px;
+        background-color: #0ea5e9;
+        border-radius: 50%;
+        filter: blur(120px);
+        opacity: 0.1;
+        top: -100px;
+        right: -100px;
+        z-index: 0;
+      }
+
+      .glow-blob-purple {
+        position: absolute;
+        width: 700px;
+        height: 700px;
+        background-color: #6366f1;
+        border-radius: 50%;
+        filter: blur(120px);
+        opacity: 0.1;
+        top: -300px;
+        left: 200px;
+        z-index: 0;
+      }
+
+      .glass-panel {
+        background-color: rgba(30, 41, 59, 0.6);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+
+      .grid-bg {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-image: linear-gradient(
+            rgba(255, 255, 255, 0.03) 1px,
+            transparent 1px
+          ),
+          linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.03) 1px,
+            transparent 1px
+          );
+        background-size: 40px 40px;
+        z-index: 0;
+        opacity: 0.3;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="slide-container text-white">
+      <!-- Background Elements -->
+      <div class="grid-bg"></div>
+      <div class="glow-blob-blue"></div>
+      <div class="glow-blob-purple"></div>
+
+      <!-- Header -->
+      <div
+        class="relative z-10 px-16 pt-12 pb-4 flex justify-between items-end border-b border-gray-800"
+      >
+        <div>
+          <div class="flex items-center space-x-3 mb-2">
+            <span
+              class="text-blue-400 code-font text-sm font-bold tracking-wider uppercase"
+              >Agenda</span
+            >
+            <div class="h-px w-10 bg-gray-700"></div>
+          </div>
+          <h1 class="text-5xl font-bold tracking-tight text-white thai-font">
+            Session Outline
+          </h1>
+        </div>
+        <div class="text-right">
+          <p class="text-gray-400 text-sm code-font">Overview</p>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div
+        class="relative z-10 flex-1 px-16 py-8 flex items-center justify-center"
+      >
+        <div class="grid grid-cols-2 gap-8 w-full" style="max-width: 1100px">
+          <!-- Module 1: Fundamentals -->
+          <div
+            class="glass-panel rounded-2xl p-6 border-l-4 border-blue-500"
+            style="transition: background-color 0.3s"
+            onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'"
+            onmouseout="this.style.backgroundColor=''"
+          >
+            <h2
+              class="text-xl font-bold text-blue-300 mb-4 flex items-center code-font"
+            >
+              <span
+                class="w-8 h-8 rounded flex items-center justify-center mr-3 text-sm"
+                style="background-color: rgba(59, 130, 246, 0.2); color: #60a5fa"
+                >01</span
+              >
+              Introduction & Core Concepts
+            </h2>
+            <ul class="space-y-3 text-gray-300 thai-font ml-11">
+              <li class="flex items-start">
+                <i class="fas fa-check text-blue-500 mt-1 mr-3 text-xs"></i>
+                <span><span class="text-white font-bold">Definition:</span> Prompt Engineering คืออะไร?</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-check text-blue-500 mt-1 mr-3 text-xs"></i>
+                <span><span class="text-white font-bold">Comparison:</span> ผู้ใช้งานทั่วไป <span class="text-gray-500 text-xs mx-1">vs</span> Prompt Engineer</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-check text-blue-500 mt-1 mr-3 text-xs"></i>
+                <span><span class="text-white font-bold">LLM Behavior:</span> เข้าใจระบบความคิด AI (System 1 vs 2)</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Module 2: Frameworks -->
+          <div
+            class="glass-panel rounded-2xl p-6 border-l-4 border-green-500"
+            style="transition: background-color 0.3s"
+            onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'"
+            onmouseout="this.style.backgroundColor=''"
+          >
+            <h2
+              class="text-xl font-bold text-green-300 mb-4 flex items-center code-font"
+            >
+              <span
+                class="w-8 h-8 rounded flex items-center justify-center mr-3 text-sm"
+                style="
+                  background-color: rgba(16, 185, 129, 0.2);
+                  color: #34d399;
+                "
+                >02</span
+              >
+              Structure & Techniques
+            </h2>
+            <ul class="space-y-3 text-gray-300 thai-font ml-11">
+              <li class="flex items-start">
+                <i class="fas fa-check text-green-500 mt-1 mr-3 text-xs"></i>
+                <span><span class="text-white font-bold">The 6 Pillars:</span> องค์ประกอบของ Prompt ที่สมบูรณ์</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-check text-green-500 mt-1 mr-3 text-xs"></i>
+                <span><span class="text-white font-bold">Prompt Techniques:</span>Zero/Few-shot, CoT</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-check text-green-500 mt-1 mr-3 text-xs"></i>
+                <span><span class="text-white font-bold">Iterative Improvement & Feedback:</span> วงจรการปรับปรุงผลลัพธ์</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Module 3: Workshop (Full Width) -->
+          <div
+            class="glass-panel rounded-2xl p-6 border-l-4 col-span-2"
+            style="
+              border-color: #f97316;
+              transition: background-color 0.3s;
+            "
+            onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'"
+            onmouseout="this.style.backgroundColor=''"
+          >
+            <h2
+              class="text-xl font-bold mb-4 flex items-center code-font"
+              style="color: #fdba74"
+            >
+              <span
+                class="w-8 h-8 rounded flex items-center justify-center mr-3 text-sm"
+                style="
+                  background-color: rgba(249, 115, 22, 0.2);
+                  color: #fb923c;
+                "
+                >03</span
+              >
+              Workshop
+            </h2>
+            <div class="px-4 py-1">
+               <div class="flex flex-col space-y-3">
+                  <div class="flex items-center space-x-3 mb-1 border-b border-gray-700 pb-2">
+                     <i class="fas fa-laptop-code text-orange-400 text-xl"></i>
+                     <strong class="text-white text-lg code-font">Evaluate and Improve Prompts (Individual)</strong>
+                  </div>
+                  <ul class="grid grid-cols-3 gap-4 text-gray-300 thai-font ml-2 text-base">
+                      <li class="flex items-start bg-gray-800 bg-opacity-40 p-3 rounded-lg border border-gray-700">
+                          <span class="w-6 h-6 rounded-full bg-red-500 bg-opacity-20 text-red-500 flex items-center justify-center text-xs mr-3 font-bold shrink-0">1</span>
+                          <span>วิเคราะห์ <span class="text-red-300">Bad Prompt</span> ที่ได้รับมอบหมาย</span>
+                      </li>
+                      <li class="flex items-start bg-gray-800 bg-opacity-40 p-3 rounded-lg border border-gray-700">
+                          <span class="w-6 h-6 rounded-full bg-green-500 bg-opacity-20 text-green-500 flex items-center justify-center text-xs mr-3 font-bold shrink-0">2</span>
+                          <span>ปรับปรุงแก้ไขให้ได้ <span class="text-green-300">Better Output</span></span>
+                      </li>
+                      <li class="flex items-start bg-gray-800 bg-opacity-40 p-3 rounded-lg border border-gray-700">
+                          <span class="w-6 h-6 rounded-full bg-blue-500 bg-opacity-20 text-blue-500 flex items-center justify-center text-xs mr-3 font-bold shrink-0">3</span>
+                          <span>อธิบาย <span class="text-blue-300">Reasoning</span> ว่าทำไมถึงปรับแบบนั้น</span>
+                      </li>
+                  </ul>
+               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div
+        class="absolute bottom-6 right-8 text-gray-600 code-font text-xs flex items-center space-x-4"
+      >
+        <span>AI Prompt Engineering</span>
+        <span class="w-px h-3 bg-gray-700"></span>
+        <span class="text-gray-500">Overview</span>
+      </div>
+    </div>
+  </body>
+</html>

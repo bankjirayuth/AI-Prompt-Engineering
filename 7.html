@@ -1,0 +1,367 @@
+<!doctype html>
+
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Iterative Prompt Improvement</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&amp;family=Kanit:wght@300;400;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #0f172a;
+        /* Slate 900 */
+      }
+
+      .slide-container {
+        width: 1280px;
+        height: 720px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+      }
+
+      .thai-font {
+        font-family: "Kanit", sans-serif;
+      }
+
+      .code-font {
+        font-family: "JetBrains Mono", monospace;
+      }
+
+      /* Background Effects */
+      .glow-blob-purple {
+        position: absolute;
+        width: 600px;
+        height: 600px;
+        background-color: #8b5cf6;
+        /* Violet 500 */
+        border-radius: 50%;
+        filter: blur(120px);
+        opacity: 0.15;
+        top: -200px;
+        right: 100px;
+        z-index: 0;
+      }
+
+      .glow-blob-blue {
+        position: absolute;
+        width: 600px;
+        height: 600px;
+        background-color: #3b82f6;
+        /* Blue 500 */
+        border-radius: 50%;
+        filter: blur(120px);
+        opacity: 0.15;
+        bottom: -200px;
+        left: -100px;
+        z-index: 0;
+      }
+
+      .glass-panel {
+        background-color: rgba(30, 41, 59, 0.6);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow:
+          0 4px 6px -1px rgba(0, 0, 0, 0.1),
+          0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      }
+
+      /* Workflow Nodes */
+      .workflow-step {
+        display: flex;
+        align-items: center;
+        position: relative;
+        z-index: 10;
+      }
+
+      .step-circle {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        border: 2px solid;
+        background-color: #0f172a;
+        position: relative;
+        z-index: 20;
+        transition: all 0.3s ease;
+      }
+
+      /* Timeline Cards */
+      .timeline-card {
+        transition: transform 0.3s ease;
+      }
+
+      .timeline-card:hover {
+        transform: translateY(-5px);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="slide-container text-white">
+      <!-- Background Elements -->
+      <div class="glow-blob-purple"></div>
+      <div class="glow-blob-blue"></div>
+      <!-- Subtle Texture Overlay -->
+      <div
+        class="absolute inset-0 opacity-10 z-0"
+        style="
+          background-image: url(&quot;https://page.gensparksite.com/slides_images/d78c291356203ff708c10d3c66a634c3.webp&quot;);
+          background-size: cover;
+        "
+      ></div>
+      <!-- Header -->
+      <div
+        class="relative z-10 px-16 pt-10 pb-2 flex justify-between items-end"
+      >
+        <div>
+          <div class="flex items-center space-x-3 mb-2">
+            <span
+              class="text-blue-400 code-font text-sm font-bold tracking-wider uppercase"
+              >Workflow</span
+            >
+            <div class="h-px w-10 bg-gray-700"></div>
+          </div>
+          <h1 class="text-4xl font-bold thai-font tracking-tight text-white">
+            Iterative Prompt Improvement
+            <span class="text-gray-500 font-light">&amp; Feedback Loops</span>
+          </h1>
+        </div>
+        <div class="text-right">
+          <p class="text-gray-400 text-sm code-font">Module 03: Process</p>
+        </div>
+      </div>
+      <!-- Main Content -->
+      <div class="relative z-10 flex-1 px-16 py-6 flex flex-col gap-8">
+        <!-- Part 1: Workflow Diagram -->
+        <div class="flex flex-col">
+          <h2
+            class="text-xl font-bold text-gray-200 mb-6 flex items-center code-font"
+          >
+            <i class="fas fa-sync-alt mr-3 text-green-400"></i> The Cycle: Draft
+            → Test → Analyze → Refine
+          </h2>
+          <div class="glass-panel rounded-2xl p-6 relative overflow-hidden">
+            <!-- Connecting Line Background -->
+            <div
+              class="absolute left-20 right-20 top-1/2 transform -translate-y-1/2 h-1 bg-gray-700 z-0"
+            ></div>
+            <div class="flex items-center justify-between px-10 relative z-10">
+              <!-- Step 1 -->
+              <div class="workflow-step flex-col items-center gap-3">
+                <div
+                  class="step-circle border-gray-500 text-gray-400 bg-gray-900"
+                >
+                  <i class="fas fa-pencil-alt"></i>
+                </div>
+                <p class="text-sm font-bold code-font text-gray-300">Draft</p>
+              </div>
+              <!-- Arrow -->
+              <div
+                class="z-10 bg-gray-900 p-2 rounded-full border border-gray-700"
+              >
+                <i class="fas fa-arrow-right text-gray-500"></i>
+              </div>
+              <!-- Step 2 -->
+              <div class="workflow-step flex-col items-center gap-3">
+                <div
+                  class="step-circle border-blue-500 text-blue-400 bg-gray-900 shadow-lg"
+                >
+                  <i class="fas fa-play"></i>
+                </div>
+                <p class="text-sm font-bold code-font text-blue-300">Test</p>
+              </div>
+              <!-- Arrow -->
+              <div
+                class="z-10 bg-gray-900 p-2 rounded-full border border-gray-700"
+              >
+                <i class="fas fa-arrow-right text-gray-500"></i>
+              </div>
+              <!-- Step 3 -->
+              <div class="workflow-step flex-col items-center gap-3">
+                <div
+                  class="step-circle border-purple-500 text-purple-400 bg-gray-900 shadow-lg"
+                >
+                  <i class="fas fa-microscope"></i>
+                </div>
+                <p class="text-sm font-bold code-font text-purple-300">
+                  Analyze
+                </p>
+              </div>
+              <!-- Arrow -->
+              <div
+                class="z-10 bg-gray-900 p-2 rounded-full border border-gray-700"
+              >
+                <i class="fas fa-arrow-right text-gray-500"></i>
+              </div>
+              <!-- Step 4 -->
+              <div class="workflow-step flex-col items-center gap-3">
+                <div
+                  class="step-circle border-green-500 text-green-400 bg-gray-900 shadow-lg"
+                >
+                  <i class="fas fa-sliders-h"></i>
+                </div>
+                <p class="text-sm font-bold code-font text-green-300">Refine</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Part 2: Use Case Timeline -->
+        <div class="flex-1 flex flex-col min-h-0">
+          <div class="flex justify-between items-center mb-4">
+            <h2
+              class="text-xl font-bold text-gray-200 flex items-center code-font"
+            >
+              <i class="fas fa-robot mr-3 text-blue-400"></i> Use Case:
+              Automated Code Review Bot
+            </h2>
+            <div
+              class="flex items-center space-x-2 text-xs text-gray-500 code-font bg-gray-800 px-3 py-1 rounded-full border border-gray-700"
+            >
+              <i class="fab fa-github"></i>
+              <span>Example Progression</span>
+            </div>
+          </div>
+          <!-- Timeline Cards Container -->
+          <div class="flex gap-4 h-full">
+            <!-- Draft 1 -->
+            <div
+              class="flex-1 glass-panel rounded-xl p-4 border-t-4 border-red-500 flex flex-col timeline-card bg-red-900 bg-opacity-5"
+            >
+              <div class="flex justify-between items-start mb-3">
+                <span
+                  class="text-xs font-bold text-red-400 uppercase tracking-wider code-font"
+                  >Draft 1</span
+                >
+                <i class="fas fa-times-circle text-red-500 opacity-80"></i>
+              </div>
+              <div class="bg-gray-800 p-3 rounded mb-3 border border-gray-700">
+                <p class="text-sm text-gray-300 thai-font italic">
+                  "รีวิวโค้ดนี้ให้หน่อย"
+                </p>
+              </div>
+              <p
+                class="text-xs text-gray-400 mt-auto thai-font leading-relaxed"
+              >
+                <span class="text-red-400 font-bold">Feedback:</span> กว้างไป,
+                จับผิดเรื่องเล็กน้อย (Nitpicking), ไม่ตรงจุดประสงค์
+              </p>
+            </div>
+            <!-- Refine 1 -->
+            <div
+              class="flex-1 glass-panel rounded-xl p-4 border-t-4 border-yellow-500 flex flex-col timeline-card bg-yellow-900 bg-opacity-5"
+            >
+              <div class="flex justify-between items-start mb-3">
+                <span
+                  class="text-xs font-bold text-yellow-400 uppercase tracking-wider code-font"
+                  >Refine 1</span
+                >
+                <i class="fas fa-tools text-yellow-500 opacity-80"></i>
+              </div>
+              <div class="bg-gray-800 p-3 rounded mb-3 border border-gray-700">
+                <p class="text-xs text-gray-300 code-font mb-1">
+                  <span class="text-blue-400">+ Persona:</span>
+                  <span class="text-gray-400">Senior Dev</span>
+                </p>
+                <p class="text-xs text-gray-300 code-font">
+                  <span class="text-blue-400">+ Constraint:</span>
+                  <span class="text-gray-400">Focus on Security</span>
+                </p>
+              </div>
+              <p
+                class="text-xs text-gray-400 mt-auto thai-font leading-relaxed"
+              >
+                <span class="text-yellow-400 font-bold">Feedback:</span>
+                ตรงประเด็นขึ้น แต่ภาษาและ Format ยังไม่ถูกใจทีม
+              </p>
+            </div>
+            <!-- Refine 2 -->
+            <div
+              class="flex-1 glass-panel rounded-xl p-4 border-t-4 border-blue-500 flex flex-col timeline-card bg-blue-900 bg-opacity-5"
+            >
+              <div class="flex justify-between items-start mb-3">
+                <span
+                  class="text-xs font-bold text-blue-400 uppercase tracking-wider code-font"
+                  >Refine 2</span
+                >
+                <i class="fas fa-magic text-blue-500 opacity-80"></i>
+              </div>
+              <div class="bg-gray-800 p-3 rounded mb-3 border border-gray-700">
+                <p class="text-xs text-gray-300 code-font mb-1">
+                  <span class="text-blue-400">+ Example:</span>
+                  <span class="text-gray-400">Comment Style</span>
+                </p>
+                <p class="text-xs text-gray-300 code-font">
+                  <span class="text-blue-400">+ Output:</span>
+                  <span class="text-gray-400">Markdown Table</span>
+                </p>
+              </div>
+              <p
+                class="text-xs text-gray-400 mt-auto thai-font leading-relaxed"
+              >
+                <span class="text-blue-400 font-bold">Feedback:</span>
+                รูปแบบถูกต้อง อ่านง่าย นำไปใช้ได้จริงเกือบ 100%
+              </p>
+            </div>
+            <!-- Final -->
+            <div
+              class="flex-1 glass-panel rounded-xl p-4 border-t-4 border-green-500 flex flex-col timeline-card bg-green-900 bg-opacity-10 relative overflow-hidden shadow-lg shadow-green-900/20"
+            >
+              <div class="flex justify-between items-start mb-4">
+                <span
+                  class="text-xs font-bold text-green-400 uppercase tracking-wider code-font"
+                  >Final Asset</span
+                >
+                <i class="fas fa-check-circle text-green-500"></i>
+              </div>
+              <div
+                class="flex-1 flex flex-col items-center justify-center text-center"
+              >
+                <div
+                  class="w-12 h-12 rounded-full bg-green-500 bg-opacity-20 flex items-center justify-center mb-2"
+                >
+                  <i class="fas fa-cube text-xl text-green-400"></i>
+                </div>
+                <p class="text-sm text-white font-bold thai-font">
+                  System Prompt Standard
+                </p>
+                <p class="text-xs text-green-300 mt-1 code-font opacity-70">
+                  Reusable Product
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Footer -->
+      <div
+        class="absolute bottom-6 right-8 text-gray-600 code-font text-xs flex items-center space-x-4"
+      >
+        <span>AI Prompt Engineering</span>
+        <span class="w-px h-3 bg-gray-700"></span>
+        <span class="text-gray-500">2026</span>
+        <span class="w-px h-3 bg-gray-700"></span>
+        <span class="text-green-500 font-bold">07</span>
+      </div>
+    </div>
+  </body>
+</html>

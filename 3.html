@@ -1,0 +1,506 @@
+<!doctype html>
+
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>System Prompt vs. User Prompt</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&amp;family=Kanit:wght@300;400;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;family=Sarabun:wght@400;600&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #0f172a;
+        /* Slate 900 */
+      }
+
+      .slide-container {
+        width: 1280px;
+        height: 720px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+      }
+
+      .thai-font {
+        font-family: "Kanit", sans-serif;
+      }
+
+      .code-font {
+        font-family: "JetBrains Mono", monospace;
+      }
+
+      /* Background Effects */
+      .glow-blob-purple {
+        position: absolute;
+        width: 700px;
+        height: 700px;
+        background-color: #6366f1;
+        /* Indigo 500 */
+        border-radius: 50%;
+        filter: blur(120px);
+        opacity: 0.1;
+        top: -300px;
+        left: 200px;
+        z-index: 0;
+      }
+
+      .glow-blob-cyan {
+        position: absolute;
+        width: 600px;
+        height: 600px;
+        background-color: #06b6d4;
+        /* Cyan 500 */
+        border-radius: 50%;
+        filter: blur(100px);
+        opacity: 0.1;
+        bottom: -200px;
+        right: -100px;
+        z-index: 0;
+      }
+
+      .glass-panel {
+        background-color: rgba(30, 41, 59, 0.6);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow:
+          0 4px 6px -1px rgba(0, 0, 0, 0.1),
+          0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      }
+
+      .grid-bg {
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 40px 40px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        opacity: 0.3;
+      }
+
+      .vs-badge {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 20;
+        background-color: #0f172a;
+        border: 2px solid #334155;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        color: #94a3b8;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      }
+
+      .card-system {
+        background-color: rgba(59, 130, 246, 0.05);
+        /* Blue tint */
+        border-top: 4px solid #3b82f6;
+      }
+
+      .card-user {
+        background-color: rgba(16, 185, 129, 0.05);
+        /* Green tint */
+        border-top: 4px solid #10b981;
+      }
+
+      .priority-badge {
+        font-family: "Sarabun", sans-serif;
+        font-size: 0.75rem;
+        padding: 2px 8px;
+        border-radius: 4px;
+        margin-top: 4px;
+        display: inline-block;
+        font-weight: 600;
+      }
+
+      .quiz-container {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        z-index: 50;
+      }
+
+      .quiz-toggle {
+        width: 40px;
+        height: 40px;
+        background-color: #3b82f6;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        transition: transform 0.2s;
+      }
+
+      .quiz-toggle:hover {
+        transform: scale(1.1);
+      }
+
+      .quiz-content {
+        position: absolute;
+        bottom: 50px;
+        right: 0;
+        width: 300px;
+        background-color: #1e293b;
+        border: 1px solid #475569;
+        border-radius: 12px;
+        padding: 16px;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        display: none;
+        opacity: 0;
+        transform: translateY(10px);
+        transition: opacity 0.3s, transform 0.3s;
+      }
+
+      .quiz-content.active {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .quiz-option {
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 6px;
+        transition: background 0.2s;
+      }
+
+      .quiz-option:hover {
+        background-color: #334155;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="slide-container text-white">
+      <!-- Background Elements -->
+      <div class="grid-bg"></div>
+      <div class="glow-blob-purple"></div>
+      <div class="glow-blob-cyan"></div>
+      <!-- Header -->
+      <div
+        class="relative z-10 px-16 pt-6 pb-2 flex justify-between items-end"
+      >
+        <div>
+          <div class="flex items-center space-x-3 mb-2">
+            <span
+              class="text-blue-400 code-font text-sm font-bold tracking-wider uppercase"
+              >The Hidden Instruction</span
+            >
+            <div class="h-px w-10 bg-gray-700"></div>
+          </div>
+          <h1 class="text-4xl font-bold thai-font tracking-tight text-white">
+            System Prompt <span class="text-gray-500 text-2xl mx-1">&</span> User Prompt
+          </h1>
+        </div>
+        <div class="text-right">
+          <p class="text-gray-400 text-sm code-font">
+            Module 01: Fundamentals
+          </p>
+        </div>
+      </div>
+      <!-- Main Content Area -->
+      <div class="relative z-10 flex-1 px-16 py-4 flex flex-col gap-4">
+        <!-- Comparison Columns -->
+        <div class="flex-1 flex gap-8 relative">
+          <!-- VS Badge Centered -->
+          <div class="vs-badge code-font bg-gray-800 text-gray-400 border-gray-600">&</div>
+          <!-- Left Column: System Prompt -->
+          <div
+            class="flex-1 glass-panel card-system rounded-2xl p-4 flex flex-col relative overflow-hidden group hover:bg-opacity-80 transition-all duration-300"
+          >
+            <div
+              class="absolute top-0 right-0 p-3 opacity-5 text-8xl text-blue-500 group-hover:scale-110 transition-transform duration-500"
+            >
+              <i class="fas fa-microchip"></i>
+            </div>
+            <div class="flex items-center space-x-4 mb-4 relative z-10">
+              <div
+                class="w-12 h-12 rounded-lg bg-blue-500 bg-opacity-20 flex items-center justify-center text-blue-400 text-xl border border-blue-500 border-opacity-30"
+              >
+                <i class="fas fa-user-astronaut"></i>
+              </div>
+              <div>
+                  <h2 class="text-xl font-bold text-white code-font">
+                    System Prompt
+                  </h2>
+                  <div class="priority-badge bg-blue-900 text-blue-200 border border-blue-700">
+                    บทบาท รูปแบบผลลัพธ์
+                  </div>
+                </div>
+              </div>
+              <div class="space-y-3 flex-1 relative z-10 flex flex-col">
+                <div
+                  class="bg-blue-900 bg-opacity-20 p-4 rounded-lg border border-blue-500 border-opacity-20"
+                >
+                  <p class="text-xs text-blue-300 uppercase font-bold mb-2">
+                    <i class="fas fa-info-circle mr-1"></i> Usage Concept
+                  </p>
+                  <div class="space-y-2 text-sm text-gray-200 thai-font font-light">
+                    <div>
+                      <span class="text-blue-400 font-bold code-font">Goal:</span>
+                      วาง "กฎ กติกา และบทบาท" เพื่อคุมพฤติกรรมหรือผลลัพธ์ของ AI
+                    </div>
+                    <div class="pt-2 border-t border-blue-500 border-opacity-30">
+                      <span class="text-blue-400 font-bold code-font">Where:</span>
+                      ใส่ในช่อง <b>System Prompt</b> หรือ <b>Custom Instructions</b>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="bg-gray-900 bg-opacity-40 p-3 rounded-lg border border-gray-700 flex-1"
+                >
+                  <h3 class="text-blue-300 text-sm font-bold mb-1">
+                    <i class="fas fa-keyboard mr-2"></i>Actions
+                  </h3>
+                  <ul class="text-sm text-gray-300 space-y-2 list-none pl-1">
+                    <li class="flex items-start">
+                      <span class="text-blue-500 mr-2">•</span>
+                      <span class="thai-font">กำหนดทัศนคติและบทบาท (Perspective/Character)</span>
+                    </li>
+                    <li class="flex items-start">
+                      <span class="text-blue-500 mr-2">•</span>
+                      <span class="thai-font">กำหนดข้อจำกัด (Constraints)</span>
+                    </li>
+                    <li class="flex items-start">
+                      <span class="text-blue-500 mr-2">•</span>
+                      <span class="thai-font">กำหนดรูปแบบผลลัพธ์ (Output Format)</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+          </div>
+          <!-- Right Column: User Prompt -->
+          <div
+            class="flex-1 glass-panel card-user rounded-2xl p-4 flex flex-col relative overflow-hidden group hover:bg-opacity-80 transition-all duration-300"
+          >
+            <div
+              class="absolute top-0 right-0 p-3 opacity-5 text-8xl text-green-500 group-hover:scale-110 transition-transform duration-500"
+            >
+              <i class="fas fa-comment-dots"></i>
+            </div>
+            <div class="flex items-center space-x-4 mb-4 relative z-10">
+              <div
+                class="w-12 h-12 rounded-lg bg-green-500 bg-opacity-20 flex items-center justify-center text-green-400 text-xl border border-green-500 border-opacity-30"
+              >
+                <i class="fas fa-comment-alt"></i>
+              </div>
+              <div>
+                  <h2 class="text-xl font-bold text-white code-font">
+                    User Prompt
+                  </h2>
+                  <div class="priority-badge bg-green-900 text-green-200 border border-green-700">
+                    คำสั่งแต่ละครั้ง
+                  </div>
+                </div>
+              </div>
+              <div class="space-y-3 flex-1 relative z-10 flex flex-col">
+                <div
+                  class="bg-green-900 bg-opacity-20 p-4 rounded-lg border border-green-500 border-opacity-20"
+                >
+                  <p class="text-xs text-green-300 uppercase font-bold mb-2">
+                    <i class="fas fa-info-circle mr-1"></i> Usage Concept
+                  </p>
+                  <div class="space-y-2 text-sm text-gray-200 thai-font font-light">
+                    <div>
+                      <span class="text-green-400 font-bold code-font">Goal:</span>
+                       "สั่งงานเฉพาะเจาะจง" ในแต่ละรอบ
+                    </div>
+                    <div class="pt-2 border-t border-green-500 border-opacity-30">
+                      <span class="text-green-400 font-bold code-font">Where:</span>
+                      พิมพ์ลงใน <b>Chat Input</b> ของ AI
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="bg-gray-900 bg-opacity-40 p-3 rounded-lg border border-gray-700 flex-1"
+                >
+                  <h3 class="text-green-300 text-sm font-bold mb-1">
+                    <i class="fas fa-keyboard mr-2"></i>Actions
+                  </h3>
+                  <ul class="text-sm text-gray-300 space-y-2 list-none pl-1">
+                    <li class="flex items-start">
+                      <span class="text-green-500 mr-2">•</span>
+                      <span class="thai-font">ระบุงานที่อยากให้ทำ (Task)</span>
+                    </li>
+                    <li class="flex items-start">
+                      <span class="text-green-500 mr-2">•</span>
+                      <span class="thai-font">ระบุข้อมูล (Context/Data)</span>
+                    </li>
+                    <li class="flex items-start">
+                      <span class="text-green-500 mr-2">•</span>
+                      <span class="thai-font">ระบุเงื่อนไข (Constraints/Rules)</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+          </div>
+        </div>
+        <!-- Bottom Section: Why It Matters -->
+        <div
+        <!-- Bottom Section: Why It Matters & Mini Example -->
+        <div class="flex gap-4">
+            <!-- Why it Matters -->
+            <div class="glass-panel rounded-xl p-4 flex-1 border-l-4 border-l-yellow-500">
+                <div class="flex items-center space-x-2 mb-2">
+                    <i class="fas fa-lightbulb text-yellow-500"></i>
+                    <h3 class="text-lg font-bold text-white code-font">Why System Prompt Matters?</h3>
+                </div>
+                <ul class="space-y-1 text-sm text-gray-300 thai-font pl-6 list-disc">
+                    <li><strong class="text-blue-300">Maintain Character:</strong> ช่วยให้ AI ไม่ "หลุดคาแรคเตอร์"</li>
+                    <li><strong class="text-blue-300">Standardize Output:</strong> รักษามาตรฐานของผลลัพธ์ให้คงที่</li>
+                    <li><strong class="text-blue-300">Robustness:</strong> ทำงานได้ดีแม้คำสั่งสั้นหรือกำกวม</li>
+                </ul>
+            </div>
+            
+            <!-- Mini Example -->
+            <div class="glass-panel rounded-xl p-4 flex-1 border-l-4 border-l-purple-500 flex flex-col justify-start">
+                <div class="flex items-center space-x-2 mb-2">
+                    <i class="fas fa-code text-purple-400"></i>
+                    <h3 class="text-sm font-bold text-white code-font uppercase">Example</h3>
+                </div>
+                <div class="code-font text-xs space-y-3">
+                    <div class="flex flex-col gap-1">
+                        <span class="text-blue-400 font-bold uppercase tracking-wider text-[10px]">System (Role & Rule):</span>
+                        <div class="bg-blue-900 bg-opacity-20 p-2 rounded border border-blue-500 border-opacity-30 text-gray-300 italic">
+                            "คุณคือ SQL Expert ตอบเฉพาะโค้ด Query เท่านั้น ห้ามอธิบายเพิ่ม"
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <span class="text-green-400 font-bold uppercase tracking-wider text-[10px]">User (Task):</span>
+                        <div class="bg-green-900 bg-opacity-20 p-2 rounded border border-green-500 border-opacity-30 text-gray-300">
+                            "ดึงยอดขายรวมเดือนมกราคมให้หน่อย"
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+      </div>
+      
+      <!-- Quick Evaluation Quiz -->
+      <div class="quiz-container">
+        <div class="quiz-toggle" onclick="toggleQuiz()">
+            <i class="fas fa-question text-white text-lg"></i>
+        </div>
+        <div class="quiz-content" id="quizContent">
+            <h4 class="text-white font-bold mb-3 thai-font text-sm border-b border-gray-600 pb-2">Quick Check 🧠</h4>
+            
+            <div class="mb-4 text-xs font-light text-gray-300 thai-font">
+                <p class="mb-2">Q1: ถ้าต้องการบังคับให้ตอบเป็นตารางทุกครั้งที่คุยกัน?</p>
+                <div class="flex gap-2 mb-2">
+                    <span class="quiz-option bg-gray-700 text-white" onclick="showAns(this, true, 'q1-exp')">System Prompt</span>
+                    <span class="quiz-option bg-gray-700 text-white" onclick="showAns(this, false, 'q1-exp')">User Prompt</span>
+                </div>
+                <p id="q1-exp" class="hidden text-[10px] text-blue-300 italic pl-1 border-l-2 border-blue-500">
+                    เฉลย: System Prompt เพราะเป็น "กฎกติกา" ที่ต้องการให้ AI จำและทำตามตลอดไป
+                </p>
+            </div>
+
+            <div class="text-xs font-light text-gray-300 thai-font">
+                <p class="mb-2">Q2: ต้องการให้ช่วย 'เขียนอีเมลสมัครงาน' โดยเน้นความเป็นมืออาชีพและกระชับ?</p>
+                <div class="flex gap-2 mb-2">
+                    <span class="quiz-option bg-gray-700 text-white" onclick="showAns(this, false, 'q2-exp')">System Prompt</span>
+                    <span class="quiz-option bg-gray-700 text-white" onclick="showAns(this, true, 'q2-exp')">User Prompt</span>
+                </div>
+                <p id="q2-exp" class="hidden text-[10px] text-blue-300 italic pl-1 border-l-2 border-blue-500">
+                    เฉลย: User Prompt เพราะเป็น "โจทย์เฉพาะกิจ" (Specific Task) ที่ทำครั้งเดียวจบ ไม่ได้เปลี่ยนนิสัย AI ถาวร
+                </p>
+            </div>
+        </div>
+      </div>
+
+      <script>
+        function toggleQuiz() {
+            const content = document.getElementById('quizContent');
+            const isActive = content.classList.contains('active');
+            
+            if (isActive) {
+                content.classList.remove('active');
+                // Reset quiz when closing
+                setTimeout(resetQuiz, 300); // Delay reset for smooth transition
+            } else {
+                resetQuiz(); // Reset when opening just in case
+                content.classList.add('active');
+            }
+        }
+
+        function resetQuiz() {
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach(option => {
+                option.style.backgroundColor = ''; // Reset to default CSS
+                option.classList.remove('bg-green-500', 'bg-red-500'); // Remove tailwind classes if added dynamically
+                const originalText = option.innerText.replace(' ✅', '').replace(' ❌', '');
+                option.innerText = originalText;
+                option.style.pointerEvents = 'auto'; // Re-enable clicking
+            });
+            
+            // Hide explanations
+            document.querySelectorAll('[id$="-exp"]').forEach(el => el.classList.add('hidden'));
+        }
+
+        function showAns(element, isCorrect, expId) {
+            // Check if already answered in this group to prevent multiple clicks
+            const parent = element.parentElement;
+            const options = parent.querySelectorAll('.quiz-option');
+            
+            // Reset siblings in the same question group
+            options.forEach(opt => {
+                opt.style.backgroundColor = ''; // Reset background
+                const originalText = opt.innerText.replace(' ✅', '').replace(' ❌', '');
+                opt.innerText = originalText;
+            });
+
+            if (isCorrect) {
+                element.style.backgroundColor = '#10b981'; // Green
+                element.innerText += ' ✅';
+            } else {
+                element.style.backgroundColor = '#ef4444'; // Red
+                element.innerText += ' ❌';
+            }
+            
+            // Show explanation
+            if (expId) {
+                document.getElementById(expId).classList.remove('hidden');
+            }
+        }
+      </script>
+      </div>
+      <!-- Footer -->
+      <div
+        class="absolute bottom-6 right-8 text-gray-600 code-font text-xs flex items-center space-x-4"
+      >
+        <span>AI Prompt Engineering for Developers</span>
+        <span class="w-px h-3 bg-gray-700"></span>
+        <span class="text-gray-500">2026</span>
+        <span class="w-px h-3 bg-gray-700"></span>
+        <span class="text-green-500 font-bold">03</span>
+      </div>
+    </div>
+  </body>
+</html>

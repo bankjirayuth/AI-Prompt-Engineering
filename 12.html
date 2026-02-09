@@ -1,0 +1,438 @@
+<!doctype html>
+
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Workshop 5: Code Conversion</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&amp;family=Kanit:wght@300;400;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #0f172a; /* Slate 900 */
+      }
+      .slide-container {
+        width: 1280px;
+        height: 720px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+      }
+      .thai-font {
+        font-family: "Kanit", sans-serif;
+      }
+      .code-font {
+        font-family: "JetBrains Mono", monospace;
+      }
+      /* Background Effects */
+      .glow-blob-blue {
+        position: absolute;
+        width: 600px;
+        height: 600px;
+        background-color: #0ea5e9; /* Sky 500 */
+        border-radius: 50%;
+        filter: blur(120px);
+        opacity: 0.1;
+        top: -100px;
+        right: -100px;
+        z-index: 0;
+      }
+      .glow-blob-purple {
+        position: absolute;
+        width: 500px;
+        height: 500px;
+        background-color: #8b5cf6; /* Violet 500 */
+        border-radius: 50%;
+        filter: blur(100px);
+        opacity: 0.1;
+        bottom: -150px;
+        left: -100px;
+        z-index: 0;
+      }
+
+      /* Glass Panel */
+      .glass-panel {
+        background-color: rgba(30, 41, 59, 0.7); /* Slate 800 */
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+      }
+
+      .card-header-left {
+        background-color: rgba(239, 68, 68, 0.1); /* Red tint */
+        border-bottom: 1px solid rgba(239, 68, 68, 0.2);
+      }
+      .card-header-right {
+        background-color: rgba(16, 185, 129, 0.1); /* Green tint */
+        border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+      }
+
+      /* Status Badge */
+      .status-badge {
+        position: absolute;
+        top: -10px;
+        right: 20px;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+      .badge-todo {
+        background-color: #ef4444;
+        color: white;
+      }
+      .badge-solved {
+        background-color: #10b981;
+        color: white;
+      }
+
+      /* Grid Pattern Background */
+      .grid-pattern {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-image: radial-gradient(
+          rgba(255, 255, 255, 0.1) 1px,
+          transparent 1px
+        );
+        background-size: 24px 24px;
+        opacity: 0.2;
+        z-index: 0;
+      }
+      /* Solution Blur */
+      .solution-panel {
+        position: relative;
+      }
+      .solution-content {
+        transition: filter 0.3s ease;
+      }
+      .solution-content.blurred {
+        filter: blur(8px);
+        user-select: none;
+      }
+      .toggle-btn {
+        position: absolute;
+        top: 12px;
+        right: 80px;
+        background: rgba(59, 130, 246, 0.2);
+        border: 1px solid rgba(59, 130, 246, 0.5);
+        color: #60a5fa;
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-size: 12px;
+        cursor: pointer;
+        z-index: 30;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .toggle-btn:hover {
+        background: rgba(59, 130, 246, 0.4);
+      }
+      .toggle-btn.revealed {
+        background: rgba(16, 185, 129, 0.2);
+        border-color: rgba(16, 185, 129, 0.5);
+        color: #10b981;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide-container text-white">
+      <!-- Background Elements -->
+      <div class="grid-pattern"></div>
+      <div class="glow-blob-blue"></div>
+      <div class="glow-blob-purple"></div>
+      <!-- Header -->
+      <div class="relative z-10 px-16 pt-6 pb-2 flex justify-between items-end">
+        <div>
+          <div class="flex items-center space-x-3 mb-1">
+            <span
+              class="text-yellow-400 code-font text-xs font-bold tracking-wider uppercase"
+              >Scenario 05</span
+            >
+            <div class="h-px w-10 bg-gray-700"></div>
+          </div>
+          <h1 class="text-3xl font-bold thai-font tracking-tight text-white">
+            Workshop: <span class="text-blue-400">แปลงภาษาโค้ด</span>
+            <span class="text-gray-500 font-light text-xl"
+              >(Code Conversion)</span
+            >
+          </h1>
+        </div>
+        <div class="text-right">
+          <p class="text-gray-400 text-sm code-font">Module 03: Practice</p>
+        </div>
+      </div>
+      <!-- Main Content Area -->
+      <div class="relative z-10 flex-1 px-16 py-3 flex gap-6">
+        <!-- Left Column: The Assignment -->
+        <div class="w-1/2 flex flex-col">
+          <div
+            class="glass-panel rounded-2xl flex-1 flex flex-col relative border-t-4 border-red-500"
+          >
+            <div class="status-badge badge-todo code-font">Your Turn</div>
+            <!-- Card Header -->
+            <div class="card-header-left p-6">
+              <div class="flex items-center space-x-3">
+                <div
+                  class="w-10 h-10 rounded-lg bg-red-500 bg-opacity-20 flex items-center justify-center text-red-400"
+                >
+                  <i class="fas fa-code-branch"></i>
+                </div>
+                <h2 class="text-xl font-bold text-white thai-font">
+                  ใบงานสำหรับผู้เข้าร่วม
+                </h2>
+              </div>
+            </div>
+            <!-- Card Content -->
+            <div class="p-6 space-y-6 flex-1">
+              <!-- Situation -->
+              <div>
+                <h3
+                  class="text-sm text-gray-400 uppercase font-bold mb-2 code-font flex items-center"
+                >
+                  <i class="fas fa-laptop-code mr-2 text-blue-400"></i>
+                  Situation
+                </h3>
+                <p
+                  class="text-gray-200 thai-font font-light bg-gray-800 bg-opacity-50 p-3 rounded-lg border border-gray-700"
+                >
+                  ไปเจอตัวอย่างโค้ดดีๆ ใน Python แต่อยากเอามาใช้ในโปรเจกต์
+                  JavaScript (Frontend)
+                </p>
+              </div>
+              <!-- Bad Prompt -->
+              <div>
+                <h3
+                  class="text-sm text-gray-400 uppercase font-bold mb-2 code-font flex items-center"
+                >
+                  <i class="fas fa-times-circle mr-2 text-red-400"></i> Bad
+                  Prompt
+                </h3>
+                <div
+                  class="bg-red-900 bg-opacity-10 p-4 rounded-lg border border-red-500 border-opacity-30"
+                >
+                  <p class="text-red-200 thai-font italic text-lg">
+                    "แปลงโค้ดนี้เป็น JS ให้หน่อย [แปะโค้ด]"
+                  </p>
+                </div>
+              </div>
+              <!-- Mission -->
+              <div>
+                <h3
+                  class="text-sm text-gray-400 uppercase font-bold mb-2 code-font flex items-center"
+                >
+                  <i class="fas fa-flag-checkered mr-2 text-yellow-400"></i>
+                  Mission
+                </h3>
+                <p class="text-gray-200 thai-font">
+                  เขียน Prompt ให้ได้โค้ดใหม่ที่ทำงานได้เหมือนเดิมและเขียน
+                  <span class="text-green-400 font-bold"
+                    >ถูกหลักภาษาใหม่ (ES6+)</span
+                  >
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Right Column: The Solution -->
+        <div class="w-1/2 flex flex-col">
+          <div
+            class="solution-panel glass-panel rounded-2xl flex-1 flex flex-col relative border-t-4 border-green-500"
+          >
+            <button
+              class="toggle-btn thai-font"
+              id="toggleBtn"
+              onclick="toggleSolution()"
+            >
+              <i class="fas fa-eye" id="toggleIcon"></i>
+              <span id="toggleText">ดูเฉลย</span>
+            </button>
+            <div class="status-badge badge-solved code-font">
+              Solution Guide
+            </div>
+            <div class="card-header-right p-4">
+              <div class="flex items-center space-x-3">
+                <div
+                  class="w-8 h-8 rounded-lg bg-green-500 bg-opacity-20 flex items-center justify-center text-green-400"
+                >
+                  <i class="fas fa-lightbulb text-sm"></i>
+                </div>
+                <h2 class="text-lg font-bold text-white thai-font">
+                  เฉลย / แนวทาง
+                </h2>
+              </div>
+            </div>
+            <div
+              class="solution-content blurred p-4 flex-1 overflow-y-auto"
+              id="solutionContent"
+            >
+              <div class="space-y-4">
+                <!-- Prompt Structure Breakdown -->
+                <div
+                  class="bg-gray-900 bg-opacity-60 rounded-lg p-1 border border-gray-700"
+                >
+                  <!-- Row 1: Persona -->
+                  <div class="flex p-3 border-b border-gray-800">
+                    <div
+                      class="w-24 text-blue-400 font-bold code-font text-xs uppercase tracking-wide pt-1"
+                    >
+                      Persona
+                    </div>
+                    <div class="flex-1 text-gray-300 thai-font text-sm">
+                      รับบทเป็น
+                      <span class="text-white font-semibold"
+                        >Polyglot Programmer</span
+                      >
+                      (ผู้เชี่ยวชาญหลายภาษา)
+                    </div>
+                  </div>
+                  <!-- Row 2: Context -->
+                  <div class="flex p-3 border-b border-gray-800">
+                    <div
+                      class="w-24 text-blue-400 font-bold code-font text-xs uppercase tracking-wide pt-1"
+                    >
+                      Context
+                    </div>
+                    <div class="flex-1 text-gray-300 thai-font text-sm">
+                      เรากำลังย้าย Logic การคำนวณภาษีจาก Backend (Python)
+                      มาทำที่ Frontend (JavaScript)
+                    </div>
+                  </div>
+                  <!-- Row 3: Task -->
+                  <div class="flex p-3 border-b border-gray-800">
+                    <div
+                      class="w-24 text-blue-400 font-bold code-font text-xs uppercase tracking-wide pt-1"
+                    >
+                      Task
+                    </div>
+                    <div class="flex-1 text-gray-300 thai-font text-sm">
+                      แปลงโค้ด Python ที่แนบมานี้ ให้เป็น
+                      <span class="text-white font-semibold"
+                        >JavaScript (ES6+)</span
+                      >
+                    </div>
+                  </div>
+                  <!-- Row 4: Constraint -->
+                  <div
+                    class="flex p-3 border-b border-gray-800 bg-green-900 bg-opacity-10"
+                  >
+                    <div
+                      class="w-24 text-green-400 font-bold code-font text-xs uppercase tracking-wide pt-1"
+                    >
+                      Constraints
+                    </div>
+                    <div class="flex-1 text-gray-300 thai-font text-sm">
+                      <ul class="list-disc list-inside space-y-1">
+                        <li>
+                          ใช้
+                          <span class="text-white code-font">const</span> และ
+                          <span class="text-white code-font">let</span> แทน var
+                        </li>
+                        <li>
+                          ใช้
+                          <span class="text-white code-font"
+                            >Arrow Function</span
+                          >
+                        </li>
+                        <li>รักษาชื่อตัวแปรเดิมไว้</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <!-- Row 5: Output -->
+                  <div class="flex p-3">
+                    <div
+                      class="w-24 text-blue-400 font-bold code-font text-xs uppercase tracking-wide pt-1"
+                    >
+                      Output
+                    </div>
+                    <div class="flex-1 text-gray-300 thai-font text-sm">
+                      JavaScript Code Block
+                    </div>
+                  </div>
+                </div>
+                <!-- Expected Result Preview -->
+                <div class="mt-4 pt-4 border-t border-gray-700">
+                  <div class="flex items-center space-x-2 mb-2">
+                    <span class="text-xs text-gray-500 code-font uppercase"
+                      >Expected Output</span
+                    >
+                  </div>
+                  <div
+                    class="bg-black bg-opacity-40 p-3 rounded border border-gray-800 code-font text-xs text-green-300"
+                  >
+                    <span class="text-purple-400">const</span> calculateTax =
+                    (income) <span class="text-purple-400">=&gt;</span> {<br />
+                    <span class="text-purple-400">const</span> taxRate =
+                    0.07;<br />
+                    <span class="text-purple-400">return</span> income *
+                    taxRate;<br />
+                    };
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Footer -->
+      <div
+        class="absolute bottom-6 right-8 text-gray-600 code-font text-xs flex items-center space-x-4"
+      >
+        <span>AI Prompt Engineering</span>
+        <span class="w-px h-3 bg-gray-700"></span>
+        <span class="text-gray-500">2026</span>
+        <span class="w-px h-3 bg-gray-700"></span>
+        <span class="text-green-500 font-bold">12</span>
+      </div>
+    </div>
+    <script>
+      let isRevealed = false;
+      function toggleSolution() {
+        const content = document.getElementById("solutionContent");
+        const btn = document.getElementById("toggleBtn");
+        const icon = document.getElementById("toggleIcon");
+        const text = document.getElementById("toggleText");
+        isRevealed = !isRevealed;
+        if (isRevealed) {
+          content.classList.remove("blurred");
+          btn.classList.add("revealed");
+          icon.className = "fas fa-eye-slash";
+          text.textContent = "ซ่อนเฉลย";
+        } else {
+          content.classList.add("blurred");
+          btn.classList.remove("revealed");
+          icon.className = "fas fa-eye";
+          text.textContent = "ดูเฉลย";
+        }
+      }
+      function revealSolution() {
+        if (!isRevealed) toggleSolution();
+      }
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "s" || e.key === "S") toggleSolution();
+      });
+      window.addEventListener("message", (e) => {
+        if (e.data === "revealSolution") revealSolution();
+      });
+    </script>
+  </body>
+</html>
