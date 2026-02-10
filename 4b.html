@@ -128,10 +128,11 @@
           </div>
           <h1 class="text-4xl font-bold thai-font tracking-tight text-white">
             Common <span class="text-red-400">Pitfalls</span> to Avoid
+            <span class="block text-lg text-gray-400 font-normal thai-font mt-1">ข้อผิดพลาดทั่วไปที่ควรหลีกเลี่ยง</span>
           </h1>
         </div>
         <div class="text-right">
-          <p class="text-gray-400 text-sm code-font">Module 02: Framework</p>
+          <p class="text-gray-400 text-sm code-font">Module 02: Structure & Techniques</p>
         </div>
       </div>
 
@@ -139,7 +140,7 @@
       <div class="relative z-10 flex-1 px-16 py-4 flex flex-col gap-4">
         <!-- Pitfalls Grid -->
         <div class="grid grid-cols-2 gap-4">
-          <!-- Pitfall 1: Being Too Vague -->
+          <!-- Pitfall 1: Prompt not specific -->
           <div
             class="pitfall-card glass-panel rounded-xl p-4 border-l-4 border-red-500"
           >
@@ -148,16 +149,16 @@
                 class="w-10 h-10 rounded-lg flex items-center justify-center text-red-400 shrink-0"
                 style="background-color: rgba(239, 68, 68, 0.15)"
               >
-                <i class="fas fa-cloud-fog text-lg"></i>
+                <i class="fas fa-bullseye text-lg"></i>
               </div>
               <div class="flex-1">
-                <h3 class="font-bold text-red-300 code-font text-sm mb-1">
-                  1. Being Too Vague
+                <h3 class="font-bold text-red-300 code-font text-xl mb-1">
+                  1. Prompt not specific
                 </h3>
-                <p class="text-xs text-gray-400 thai-font leading-relaxed mb-2">
+                <p class="text-base text-gray-400 thai-font leading-relaxed mb-2">
                   Prompt กว้างเกินไป ได้ผลลัพธ์ที่ไม่ตรงจุดหรือตื้นเกินไป
                 </p>
-                <div class="flex gap-2 text-xs">
+                <div class="flex gap-2 text-sm">
                   <span
                     class="bg-red-900 bg-opacity-30 text-red-300 px-2 py-1 rounded code-font"
                     >❌ "เขียนโค้ดให้หน่อย"</span
@@ -173,23 +174,23 @@
 
           <!-- Pitfall 2: Overloading Prompt -->
           <div
-            class="pitfall-card glass-panel rounded-xl p-4 border-l-4 border-orange-500"
+            class="pitfall-card glass-panel rounded-xl p-4 border-l-4 border-blue-500"
           >
             <div class="flex items-start space-x-4">
               <div
-                class="w-10 h-10 rounded-lg flex items-center justify-center text-orange-400 shrink-0"
+                class="w-10 h-10 rounded-lg flex items-center justify-center text-blue-400 shrink-0"
                 style="background-color: rgba(249, 115, 22, 0.15)"
               >
                 <i class="fas fa-layer-group text-lg"></i>
               </div>
               <div class="flex-1">
-                <h3 class="font-bold text-orange-300 code-font text-sm mb-1">
+                <h3 class="font-bold text-blue-300 code-font text-xl mb-1">
                   2. Overloading with Tasks
                 </h3>
-                <p class="text-xs text-gray-400 thai-font leading-relaxed mb-2">
+                <p class="text-base text-gray-400 thai-font leading-relaxed mb-2">
                   ยัดหลายงานในคำสั่งเดียว ทำให้ AI สับสนและคุณภาพต่ำ
                 </p>
-                <div class="flex gap-2 text-xs">
+                <div class="flex gap-2 text-sm">
                   <span
                     class="bg-red-900 bg-opacity-30 text-red-300 px-2 py-1 rounded code-font"
                     >❌ "สร้าง API + DB + Test + Deploy"</span
@@ -215,13 +216,13 @@
                 <i class="fas fa-puzzle-piece text-lg"></i>
               </div>
               <div class="flex-1">
-                <h3 class="font-bold text-yellow-300 code-font text-sm mb-1">
+                <h3 class="font-bold text-yellow-300 code-font text-xl mb-1">
                   3. Ignoring Context
                 </h3>
-                <p class="text-xs text-gray-400 thai-font leading-relaxed mb-2">
+                <p class="text-base text-gray-400 thai-font leading-relaxed mb-2">
                   ไม่ให้ข้อมูลพื้นหลัง AI จึงตอบกว้างๆ ไม่ตรงกับ use case
                 </p>
-                <div class="flex gap-2 text-xs">
+                <div class="flex gap-2 text-sm">
                   <span
                     class="bg-red-900 bg-opacity-30 text-red-300 px-2 py-1 rounded code-font"
                     >❌ "แก้ bug นี้หน่อย"</span
@@ -247,16 +248,16 @@
                 <i class="fas fa-file-alt text-lg"></i>
               </div>
               <div class="flex-1">
-                <h3 class="font-bold text-purple-300 code-font text-sm mb-1">
+                <h3 class="font-bold text-purple-300 code-font text-xl mb-1">
                   4. Not Specifying Format
                 </h3>
-                <p class="text-xs text-gray-400 thai-font leading-relaxed mb-2">
+                <p class="text-base text-gray-400 thai-font leading-relaxed mb-2">
                   ไม่บอกรูปแบบผลลัพธ์ ได้ output ที่ใช้งานยาก
                 </p>
-                <div class="flex gap-2 text-xs">
+                <div class="flex gap-2 text-sm">
                   <span
                     class="bg-red-900 bg-opacity-30 text-red-300 px-2 py-1 rounded code-font"
-                    >❌ "ให้ข้อมูล users"</span
+                    >❌ "ให้ข้อมูล users เป็น Text ยาวๆ"</span
                   >
                   <span
                     class="bg-green-900 bg-opacity-30 text-green-300 px-2 py-1 rounded code-font"
@@ -268,7 +269,7 @@
           </div>
 
           <!-- Pitfall 5: Not Iterating -->
-          <div
+          <!-- <div
             class="pitfall-card glass-panel rounded-xl p-4 border-l-4 border-blue-500"
           >
             <div class="flex items-start space-x-4">
@@ -279,13 +280,13 @@
                 <i class="fas fa-hand-paper text-lg"></i>
               </div>
               <div class="flex-1">
-                <h3 class="font-bold text-blue-300 code-font text-sm mb-1">
+                <h3 class="font-bold text-blue-300 code-font text-xl mb-1">
                   5. Expecting Perfect First Try
                 </h3>
-                <p class="text-xs text-gray-400 thai-font leading-relaxed mb-2">
+                <p class="text-base text-gray-400 thai-font leading-relaxed mb-2">
                   คาดหวังผลลัพธ์สมบูรณ์ตั้งแต่ครั้งแรก ไม่ปรับปรุง Prompt
                 </p>
-                <div class="flex gap-2 text-xs">
+                <div class="flex gap-2 text-sm">
                   <span
                     class="bg-red-900 bg-opacity-30 text-red-300 px-2 py-1 rounded code-font"
                     >❌ "ใช้ Prompt เดิมซ้ำๆ"</span
@@ -297,9 +298,9 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
 
-          <!-- Pitfall 6: Not Validating -->
+          <!-- Pitfall 5: Not Validating -->
           <div
             class="pitfall-card glass-panel rounded-xl p-4 border-l-4 border-cyan-500"
           >
@@ -311,13 +312,13 @@
                 <i class="fas fa-check-double text-lg"></i>
               </div>
               <div class="flex-1">
-                <h3 class="font-bold text-cyan-300 code-font text-sm mb-1">
-                  6. Not Validating Output
+                <h3 class="font-bold text-cyan-300 code-font text-xl mb-1">
+                  5. Not Validating Output
                 </h3>
-                <p class="text-xs text-gray-400 thai-font leading-relaxed mb-2">
+                <p class="text-base text-gray-400 thai-font leading-relaxed mb-2">
                   เชื่อ AI 100% โดยไม่ตรวจสอบ อาจได้ข้อมูลผิดหรือ Hallucination
                 </p>
-                <div class="flex gap-2 text-xs">
+                <div class="flex gap-2 text-sm">
                   <span
                     class="bg-red-900 bg-opacity-30 text-red-300 px-2 py-1 rounded code-font"
                     >❌ Copy-Paste ทันที</span
@@ -342,10 +343,9 @@
               <i class="fas fa-exclamation-triangle"></i>
             </div>
             <div>
-              <p class="text-gray-300 thai-font text-sm">
+              <p class="text-gray-300 thai-font text-base">
                 <span class="text-red-400 font-bold">Remember:</span> AI ไม่ใช่
-                Magic ✨ — ผลลัพธ์ขึ้นอยู่กับคุณภาพของ Input (Garbage In,
-                Garbage Out) และ AI อาจ
+                Magic ✨ — ผลลัพธ์ขึ้นอยู่กับคุณภาพของ Input และอย่าลืมว่า AI อาจ
                 <span class="text-yellow-400">"Hallucinate"</span>
                 ข้อมูลที่ไม่ถูกต้องได้
               </p>
@@ -362,7 +362,7 @@
         <span class="w-px h-3 bg-gray-700"></span>
         <span class="text-gray-500">2026</span>
         <span class="w-px h-3 bg-gray-700"></span>
-        <span class="text-green-500 font-bold">4b</span>
+        <span class="text-green-500 font-bold">06</span>
       </div>
     </div>
   </body>

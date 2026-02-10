@@ -119,187 +119,218 @@
 
       <!-- Header -->
       <div
-        class="relative z-10 px-16 pt-8 pb-3 flex justify-between items-end"
+        class="relative z-10 px-16 pt-5 pb-2 flex justify-between items-end"
       >
         <div>
-          <div class="flex items-center space-x-3 mb-2">
+          <div class="flex items-center space-x-3 mb-1">
             <span
-              class="text-cyan-400 code-font text-sm font-bold tracking-wider uppercase"
+              class="text-cyan-400 code-font text-xs font-bold tracking-wider uppercase"
               >Continuous Improvement</span
             >
             <div class="h-px w-10 bg-gray-700"></div>
           </div>
-          <h1 class="text-4xl font-bold thai-font tracking-tight text-white">
-            Iterative Prompt
-            <span class="text-cyan-400">Improvement</span>
+          <h1 class="text-3xl font-bold thai-font tracking-tight text-white">
+            Iterative Prompt Improvement
+            <span class="text-gray-500 font-light text-xl">&amp; Feedback Loops</span>
           </h1>
         </div>
         <div class="text-right">
-          <p class="text-gray-400 text-sm code-font">Module 03: Advanced</p>
+          <p class="text-gray-400 text-xs code-font">Module 02: Structure & Techniques</p>
         </div>
       </div>
 
       <!-- Main Content -->
-      <div class="relative z-10 flex-1 px-16 py-4 flex gap-6">
-        <!-- Left: Feedback Loop Diagram -->
-        <div class="w-1/2 flex flex-col">
-          <h2 class="text-lg font-bold text-gray-200 mb-4 code-font flex items-center">
-            <i class="fas fa-sync-alt mr-3 text-cyan-400"></i>
-            The Feedback Loop
-          </h2>
-          
-          <!-- Cycle Diagram -->
-          <div class="glass-panel rounded-2xl p-6 flex-1 relative">
-            <div class="grid grid-cols-2 gap-4 h-full">
-              <!-- Step 1: Write -->
-              <div class="cycle-step glass-panel rounded-xl p-4 border-l-4 border-blue-500 flex flex-col">
-                <div class="flex items-center space-x-3 mb-2">
-                  <div class="w-8 h-8 rounded-full bg-blue-500 bg-opacity-20 flex items-center justify-center text-blue-400 text-sm font-bold">
-                    1
-                  </div>
-                  <h3 class="font-bold text-blue-300 code-font">Write</h3>
-                </div>
-                <p class="text-xs text-gray-400 thai-font">
-                  เขียน Prompt แรก (Draft) ใช้ 6 Pillars เป็น guideline
-                </p>
-                <div class="mt-auto pt-2 text-xs code-font text-gray-500">
-                  <i class="fas fa-pen mr-1"></i> Initial Draft
-                </div>
-              </div>
-
-              <!-- Step 2: Test -->
-              <div class="cycle-step glass-panel rounded-xl p-4 border-l-4 border-green-500 flex flex-col">
-                <div class="flex items-center space-x-3 mb-2">
-                  <div class="w-8 h-8 rounded-full bg-green-500 bg-opacity-20 flex items-center justify-center text-green-400 text-sm font-bold">
-                    2
-                  </div>
-                  <h3 class="font-bold text-green-300 code-font">Test</h3>
-                </div>
-                <p class="text-xs text-gray-400 thai-font">
-                  ส่ง Prompt ไปยัง AI และรับ Response กลับมา
-                </p>
-                <div class="mt-auto pt-2 text-xs code-font text-gray-500">
-                  <i class="fas fa-play mr-1"></i> Execute & Observe
-                </div>
-              </div>
-
-              <!-- Step 3: Analyze -->
-              <div class="cycle-step glass-panel rounded-xl p-4 border-l-4 border-yellow-500 flex flex-col">
-                <div class="flex items-center space-x-3 mb-2">
-                  <div class="w-8 h-8 rounded-full bg-yellow-500 bg-opacity-20 flex items-center justify-center text-yellow-400 text-sm font-bold">
-                    3
-                  </div>
-                  <h3 class="font-bold text-yellow-300 code-font">Analyze</h3>
-                </div>
-                <p class="text-xs text-gray-400 thai-font">
-                  ตรวจสอบ Output ตรงตามที่ต้องการหรือไม่? มีอะไรผิดพลาด?
-                </p>
-                <div class="mt-auto pt-2 text-xs code-font text-gray-500">
-                  <i class="fas fa-search mr-1"></i> Identify Gaps
-                </div>
-              </div>
-
-              <!-- Step 4: Refine -->
-              <div class="cycle-step glass-panel rounded-xl p-4 border-l-4 border-purple-500 flex flex-col">
-                <div class="flex items-center space-x-3 mb-2">
-                  <div class="w-8 h-8 rounded-full bg-purple-500 bg-opacity-20 flex items-center justify-center text-purple-400 text-sm font-bold">
-                    4
-                  </div>
-                  <h3 class="font-bold text-purple-300 code-font">Refine</h3>
-                </div>
-                <p class="text-xs text-gray-400 thai-font">
-                  ปรับปรุง Prompt ตาม feedback แล้วกลับไปทดสอบใหม่
-                </p>
-                <div class="mt-auto pt-2 text-xs code-font text-gray-500">
-                  <i class="fas fa-magic mr-1"></i> Iterate Again
-                </div>
-              </div>
+      <div class="relative z-10 flex-1 px-16 py-2 flex flex-col gap-3">
+        
+        <!-- Row 1: What, Why & When -->
+        <div class="flex gap-4 h-fit">
+          <!-- What is it? -->
+          <div class="flex-1 glass-panel rounded-xl p-3 border-l-4 border-cyan-500 flex flex-col justify-start">
+            <div class="flex items-center space-x-2 mb-1">
+              <i class="fas fa-question-circle text-cyan-400 text-lg"></i>
+              <h3 class="text-lg font-bold text-cyan-300 code-font">What? — คืออะไร?</h3>
             </div>
-            
-            <!-- Center Loop Icon -->
-            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div class="w-16 h-16 rounded-full bg-gray-800 border border-gray-700 flex items-center justify-center">
-                <i class="fas fa-redo text-cyan-400 text-xl"></i>
-              </div>
+            <p class="text-xs text-gray-300 thai-font leading-relaxed">
+              กระบวนการปรับปรุง Prompt แบบวนลูป: <span class="text-blue-300 font-bold">ร่าง -> ทดสอบ -> วิเคราะห์ -> ปรับแก้</span>
+            </p>
+          </div>
+
+          <!-- Why do it? -->
+          <div class="flex-1 glass-panel rounded-xl p-3 border-l-4 border-green-500 flex flex-col justify-start">
+            <div class="flex items-center space-x-2 mb-1">
+              <i class="fas fa-bullseye text-green-400 text-lg"></i>
+              <h3 class="text-lg font-bold text-green-300 code-font">Why? — ทำไม?</h3>
             </div>
+            <ul class="text-xs text-gray-300 thai-font space-y-0.5">
+                <li class="flex items-start"><span class="text-green-400 mr-1.5">•</span><span><span class="text-white font-bold">Context:</span> AI เข้าใจบริบทครบถ้วน ไม่ตกหล่น</span></li>
+                <li class="flex items-start"><span class="text-green-400 mr-1.5">•</span><span><span class="text-white font-bold">Accuracy:</span> ลดข้อมูลมั่ว (Hallucination) เพิ่มความแม่นยำ</span></li>
+                <li class="flex items-start"><span class="text-green-400 mr-1.5">•</span><span><span class="text-white font-bold">Robustness:</span> รองรับเงื่อนไขพิเศษ (Edge Cases) ได้ครอบคลุม</span></li>
+            </ul>
+          </div>
+
+          <!-- When to use? (Use Cases) -->
+          <div class="flex-1 glass-panel rounded-xl p-3 border-l-4 border-purple-500 flex flex-col justify-start">
+            <div class="flex items-center space-x-2 mb-1">
+              <i class="fas fa-briefcase text-purple-400 text-lg"></i>
+              <h3 class="text-lg font-bold text-purple-300 code-font">Use Cases (Dev)</h3>
+            </div>
+            <ul class="text-xs text-gray-300 thai-font space-y-0.5">
+                <li class="flex items-start"><span class="text-purple-400 mr-1.5">•</span><span><span class="text-white font-bold">Create Boilerplate:</span> สร้าง Template สำหรับ Project Structure</span></li>
+                <li class="flex items-start"><span class="text-purple-400 mr-1.5">•</span><span><span class="text-white font-bold">Create Unit Test:</span> สร้าง Template สำหรับ Test Cases</span></li>
+                <li class="flex items-start"><span class="text-purple-400 mr-1.5">•</span><span><span class="text-white font-bold">Create Documentation:</span> สร้างเอกสารสำหรับ API/System</span></li>
+            </ul>
           </div>
         </div>
 
-        <!-- Right: Best Practices -->
-        <div class="w-1/2 flex flex-col gap-4">
-          <h2 class="text-lg font-bold text-gray-200 code-font flex items-center">
-            <i class="fas fa-lightbulb mr-3 text-yellow-400"></i>
-            Best Practices
-          </h2>
+        <!-- Row 2: Feedback Loop & Best Practices -->
+        <div class="flex gap-4 flex-1 min-h-0">
+          <!-- Left: Feedback Loop Diagram -->
+          <div class="w-1/2 flex flex-col">
+            <!-- Cycle Diagram -->
+            <div class="glass-panel rounded-2xl p-4 flex-1 relative">
+              <div class="grid grid-cols-2 gap-3 h-full">
+                <!-- Step 1: Write -->
+                <div class="cycle-step glass-panel rounded-xl p-3 border-l-4 border-blue-500 flex flex-col">
+                  <div class="flex items-center space-x-2 mb-1">
+                    <div class="w-6 h-6 rounded-full bg-blue-500 bg-opacity-20 flex items-center justify-center text-blue-400 text-xs font-bold">1</div>
+                    <h3 class="font-bold text-blue-300 code-font text-sm">Write</h3>
+                  </div>
+                  <p class="text-xs text-gray-400 thai-font leading-tight">
+                    เขียน Prompt แรก (Draft) ใช้องค์ประกอบของ Prompt ที่ดีเป็น guideline
+                  </p>
+                  <div class="mt-auto pt-1 text-[10px] code-font text-gray-500">
+                    <i class="fas fa-pen mr-1"></i> Initial Draft
+                  </div>
+                </div>
 
-          <!-- Practice 1 -->
-          <div class="glass-panel rounded-xl p-4 border-l-4 border-cyan-500">
-            <div class="flex items-start space-x-3">
-              <div class="w-8 h-8 rounded-lg flex items-center justify-center text-cyan-400 bg-cyan-500 bg-opacity-15 shrink-0">
-                <i class="fas fa-history"></i>
+                <!-- Step 2: Test -->
+                <div class="cycle-step glass-panel rounded-xl p-3 border-l-4 border-green-500 flex flex-col">
+                  <div class="flex items-center space-x-2 mb-1">
+                    <div class="w-6 h-6 rounded-full bg-green-500 bg-opacity-20 flex items-center justify-center text-green-400 text-xs font-bold">2</div>
+                    <h3 class="font-bold text-green-300 code-font text-sm">Test</h3>
+                  </div>
+                  <p class="text-xs text-gray-400 thai-font leading-tight">
+                    ส่ง Prompt ไปยัง AI และรับ Response กลับมา
+                  </p>
+                  <div class="mt-auto pt-1 text-[10px] code-font text-gray-500">
+                    <i class="fas fa-play mr-1"></i> Execute & Observe
+                  </div>
+                </div>
+
+                <!-- Step 3: Analyze -->
+                <div class="cycle-step glass-panel rounded-xl p-3 border-l-4 border-yellow-500 flex flex-col">
+                  <div class="flex items-center space-x-2 mb-1">
+                    <div class="w-6 h-6 rounded-full bg-yellow-500 bg-opacity-20 flex items-center justify-center text-yellow-400 text-xs font-bold">3</div>
+                    <h3 class="font-bold text-yellow-300 code-font text-sm">Analyze</h3>
+                  </div>
+                  <p class="text-xs text-gray-400 thai-font leading-tight">
+                    ตรวจสอบ Output ตรงตามที่ต้องการหรือไม่? มีอะไรผิดพลาด?
+                  </p>
+                  <div class="mt-auto pt-1 text-[10px] code-font text-gray-500">
+                    <i class="fas fa-search mr-1"></i> Identify Gaps
+                  </div>
+                </div>
+
+                <!-- Step 4: Refine -->
+                <div class="cycle-step glass-panel rounded-xl p-3 border-l-4 border-purple-500 flex flex-col">
+                  <div class="flex items-center space-x-2 mb-1">
+                    <div class="w-6 h-6 rounded-full bg-purple-500 bg-opacity-20 flex items-center justify-center text-purple-400 text-xs font-bold">4</div>
+                    <h3 class="font-bold text-purple-300 code-font text-sm">Refine</h3>
+                  </div>
+                  <p class="text-xs text-gray-400 thai-font leading-tight">
+                    ปรับปรุง Prompt ตาม feedback แล้วกลับไปทดสอบใหม่
+                  </p>
+                  <div class="mt-auto pt-1 text-[10px] code-font text-gray-500">
+                    <i class="fas fa-magic mr-1"></i> Iterate Again
+                  </div>
+                </div>
               </div>
-              <div>
-                <h4 class="font-bold text-cyan-300 code-font text-sm mb-1">Version Your Prompts</h4>
-                <p class="text-xs text-gray-400 thai-font">
-                  เก็บ history ของ prompt แต่ละ version เพื่อเปรียบเทียบและ rollback ได้
-                </p>
+              
+              <!-- Center Loop Icon -->
+              <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div class="w-12 h-12 rounded-full bg-gray-800 border border-gray-700 flex items-center justify-center">
+                  <i class="fas fa-redo text-cyan-400 text-lg"></i>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Practice 2 -->
-          <div class="glass-panel rounded-xl p-4 border-l-4 border-green-500">
-            <div class="flex items-start space-x-3">
-              <div class="w-8 h-8 rounded-lg flex items-center justify-center text-green-400 bg-green-500 bg-opacity-15 shrink-0">
-                <i class="fas fa-vials"></i>
-              </div>
-              <div>
-                <h4 class="font-bold text-green-300 code-font text-sm mb-1">A/B Test Variations</h4>
-                <p class="text-xs text-gray-400 thai-font">
-                  ทดสอบ prompt หลาย versions กับ input เดียวกัน เปรียบเทียบผลลัพธ์
-                </p>
+          <!-- Right: Best Practices -->
+          <div class="w-1/2 flex flex-col gap-2">
+            <h2 class="text-base font-bold text-gray-200 code-font flex items-center mb-1">
+              <i class="fas fa-lightbulb mr-2 text-yellow-400"></i>
+              Best Practices
+            </h2>
+
+            <!-- Practice 1 -->
+            <div class="glass-panel rounded-xl p-2.5 border-l-4 border-cyan-500">
+              <div class="flex items-center space-x-3">
+                <div class="w-6 h-6 rounded-lg flex items-center justify-center text-cyan-400 bg-cyan-500 bg-opacity-15 shrink-0">
+                  <i class="fas fa-history text-xs"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-cyan-300 code-font text-xs mb-0.5">Version Your Prompts</h4>
+                  <p class="text-[10px] text-gray-400 thai-font leading-tight">
+                    เก็บ history ของ prompt แต่ละ version เพื่อเปรียบเทียบ
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- Practice 3 -->
-          <div class="glass-panel rounded-xl p-4 border-l-4 border-yellow-500">
-            <div class="flex items-start space-x-3">
-              <div class="w-8 h-8 rounded-lg flex items-center justify-center text-yellow-400 bg-yellow-500 bg-opacity-15 shrink-0">
-                <i class="fas fa-clipboard-check"></i>
-              </div>
-              <div>
-                <h4 class="font-bold text-yellow-300 code-font text-sm mb-1">Define Success Criteria</h4>
-                <p class="text-xs text-gray-400 thai-font">
-                  กำหนด metrics ที่ชัดเจน เช่น accuracy, format compliance, relevance
-                </p>
+            <!-- Practice 2 -->
+            <div class="glass-panel rounded-xl p-2.5 border-l-4 border-green-500">
+              <div class="flex items-center space-x-3">
+                <div class="w-6 h-6 rounded-lg flex items-center justify-center text-green-400 bg-green-500 bg-opacity-15 shrink-0">
+                  <i class="fas fa-vials text-xs"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-green-300 code-font text-xs mb-0.5">A/B Test Variations</h4>
+                  <p class="text-[10px] text-gray-400 thai-font leading-tight">
+                    ทดสอบ prompt หลาย versions กับ input เดียวกัน เปรียบเทียบผลลัพธ์
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- Practice 4 -->
-          <div class="glass-panel rounded-xl p-4 border-l-4 border-purple-500">
-            <div class="flex items-start space-x-3">
-              <div class="w-8 h-8 rounded-lg flex items-center justify-center text-purple-400 bg-purple-500 bg-opacity-15 shrink-0">
-                <i class="fas fa-file-alt"></i>
-              </div>
-              <div>
-                <h4 class="font-bold text-purple-300 code-font text-sm mb-1">Document Learnings</h4>
-                <p class="text-xs text-gray-400 thai-font">
-                  จดบันทึกสิ่งที่เรียนรู้ว่า prompt แบบไหน work/ไม่ work กับ use case นั้นๆ
-                </p>
+            <!-- Practice 3 -->
+            <div class="glass-panel rounded-xl p-2.5 border-l-4 border-yellow-500">
+              <div class="flex items-center space-x-3">
+                <div class="w-6 h-6 rounded-lg flex items-center justify-center text-yellow-400 bg-yellow-500 bg-opacity-15 shrink-0">
+                  <i class="fas fa-clipboard-check text-xs"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-yellow-300 code-font text-xs mb-0.5">Define Success Criteria</h4>
+                  <p class="text-[10px] text-gray-400 thai-font leading-tight">
+                    กำหนด "ตัวชี้วัด" ที่ชัดเจน เช่น ความถูกต้อง (Accuracy), รูปแบบถูกต้อง (Format)
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- Tip Box -->
-          <div class="glass-panel rounded-xl p-3 border border-cyan-500 border-opacity-30 mt-auto" style="background-color: rgba(6, 182, 212, 0.05)">
-            <div class="flex items-center space-x-3">
-              <i class="fas fa-info-circle text-cyan-400"></i>
-              <p class="text-xs text-gray-300 thai-font">
-                <span class="text-cyan-400 font-bold">Pro Tip:</span> 
-                เริ่มจาก prompt ง่ายๆ ก่อน แล้วค่อยๆ เพิ่มความซับซ้อนทีละ step
-              </p>
+            <!-- Practice 4 -->
+            <div class="glass-panel rounded-xl p-2.5 border-l-4 border-purple-500">
+              <div class="flex items-center space-x-3">
+                <div class="w-6 h-6 rounded-lg flex items-center justify-center text-purple-400 bg-purple-500 bg-opacity-15 shrink-0">
+                  <i class="fas fa-file-alt text-xs"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-purple-300 code-font text-xs mb-0.5">Document Learnings</h4>
+                  <p class="text-[10px] text-gray-400 thai-font leading-tight">
+                    จดบันทึกสิ่งที่เรียนรู้ว่า prompt แบบไหน work/ไม่ work
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tip Box -->
+            <div class="glass-panel rounded-xl p-2 border border-cyan-500 border-opacity-30 mt-auto" style="background-color: rgba(6, 182, 212, 0.05)">
+              <div class="flex items-center space-x-2">
+                <i class="fas fa-info-circle text-cyan-400 text-xs"></i>
+                <p class="text-[10px] text-gray-300 thai-font">
+                  <span class="text-cyan-400 font-bold">Pro Tip:</span> 
+                  เริ่มจาก prompt ง่ายๆ ก่อน แล้วค่อยๆ เพิ่มความซับซ้อนทีละ step
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -313,7 +344,7 @@
         <span class="w-px h-3 bg-gray-700"></span>
         <span class="text-gray-500">2026</span>
         <span class="w-px h-3 bg-gray-700"></span>
-        <span class="text-green-500 font-bold">6a</span>
+        <span class="text-green-500 font-bold">10</span>
       </div>
     </div>
   </body>
