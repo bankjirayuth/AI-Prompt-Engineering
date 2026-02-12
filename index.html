@@ -330,6 +330,11 @@
       <button class="nav-btn" id="nextBtn" title="Next Slide (→)">
         <i class="fas fa-chevron-right"></i>
       </button>
+      
+      <!-- Added missing Reveal Solution Button -->
+      <button class="nav-btn hidden-solution" id="revealSolutionBtn" title="Reveal Solution" style="display: none;">
+        <i class="fas fa-eye"></i>
+      </button>
     </div>
 
     <script>
@@ -375,6 +380,9 @@
         slides.forEach((slide, index) => {
           if (index + 1 === currentSlide) {
             slide.classList.add("active");
+            // Focus on active slide iframe to enable internal interactions if needed,
+            // but for global navigation we handle events at window level.
+            // Actually, we want focus on main window usually.
           } else {
             slide.classList.remove("active");
           }
@@ -437,8 +445,11 @@
       nextBtn.addEventListener("click", nextSlide);
       fullscreenBtn.addEventListener("click", toggleFullscreen);
 
-      // Keyboard navigation
-      document.addEventListener("keydown", (e) => {
+      // Main Window Keyboard navigation
+      function handleKeyboard(e) {
+        // Ignore if modifier keys are pressed (e.g. Cmd+R)
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+
         switch (e.key) {
           case "ArrowRight":
           case "PageDown":
@@ -464,8 +475,15 @@
             e.preventDefault();
             toggleFullscreen();
             break;
+          case "s":
+          case "S":
+            e.preventDefault();
+            if (typeof revealSolution === 'function') revealSolution();
+            break;
         }
-      });
+      }
+
+      document.addEventListener("keydown", handleKeyboard);
 
       // Resize handler
       window.addEventListener("resize", scaleSlides);
@@ -474,14 +492,60 @@
         setTimeout(scaleSlides, 100);
       });
 
-      // Prevent iframes from capturing focus
+      // Prevent iframes from capturing focus and forwarded events
+      // Improved: Add listeners to iframe content to forward events to main window
+      function setupIframeEvents(iframe) {
+        try {
+            // Function to attach listener
+            const attachListener = () => {
+                try {
+                    const doc = iframe.contentWindow.document;
+                    // Remove existing listener to avoid duplicates if re-run
+                    doc.removeEventListener("keydown", handleKeyboard);
+                    doc.addEventListener("keydown", (e) => {
+                        // Forward event to main handler logic
+                        handleKeyboard(e);
+                        
+                        // If we want main window to have focus back
+                        // window.focus(); 
+                    });
+                    
+                    // Also forward clicks to refocus main window?
+                    doc.addEventListener("click", () => {
+                        // Keeping focus in iframe is fine for selection, 
+                        // but we need keyboard events to bubble up/be handled.
+                        // The above listener handles it.
+                    });
+                } catch(e) {
+                    console.log("Cannot access iframe content:", e);
+                }
+            };
+
+            // Attach on load
+            iframe.addEventListener("load", attachListener);
+            
+            // Try attaching immediately if already loaded
+            if (iframe.contentWindow && iframe.contentWindow.document.readyState === 'complete') {
+                attachListener();
+            }
+        } catch (e) {
+            console.warn("Error setting up iframe events:", e);
+        }
+      }
+
       document.querySelectorAll("iframe").forEach((iframe) => {
+        // Set tabindex -1 to discourage tabbing into them, 
+        // but clicks will still give them focus.
         iframe.setAttribute("tabindex", "-1");
+        setupIframeEvents(iframe);
       });
 
-      // Click anywhere to focus main document (for keyboard navigation)
-      document.body.addEventListener("click", () => {
-        document.body.focus();
+      // Click anywhere on main background to focus main document
+      document.body.addEventListener("click", (e) => {
+         // Only if not clicking a button
+         if (!e.target.closest('button') && !e.target.closest('a')) {
+             document.body.focus();
+         }
       });
 
       // Set focus on body for keyboard events
@@ -502,16 +566,25 @@
       }
 
       function updateRevealButton() {
+        if (!revealSolutionBtn) return;
+        
         if (isWorkshopSlide() && !revealedSlides.has(currentSlide)) {
+          revealSolutionBtn.style.display = 'flex'; // Use flex to match .nav-btn
           revealSolutionBtn.classList.add("visible");
           revealSolutionBtn.classList.remove("hidden-solution");
           revealSolutionBtn.innerHTML =
-            '<i class="fas fa-eye"></i> กด S เพื่อดูเฉลย';
+            '<i class="fas fa-eye"></i>'; // Simplified for icon only design or keep text if space allows
+            // keeping text creates layout issues with round buttons, better add tooltip or expand on hover? 
+            // The existing CSS .nav-btn is small (28x28). Let's keep it icon only or expand via CSS if needed.
+            // User requested "revealSolutionBtn" specifically.
+            // Let's stick to icon to fit the bar.
         } else if (isWorkshopSlide() && revealedSlides.has(currentSlide)) {
+          revealSolutionBtn.style.display = 'flex';
           revealSolutionBtn.classList.add("visible", "hidden-solution");
-          revealSolutionBtn.innerHTML =
-            '<i class="fas fa-eye-slash"></i> เฉลยแสดงแล้ว';
+           // Change icon to indicate revealed/hidden
+           revealSolutionBtn.innerHTML = '<i class="fas fa-eye-slash"></i>';
         } else {
+          revealSolutionBtn.style.display = 'none';
           revealSolutionBtn.classList.remove("visible", "hidden-solution");
         }
       }
@@ -542,6 +615,19 @@
           if (iframeDoc) {
             const solutionContent = iframeDoc.getElementById("solutionContent");
             const solutionOverlay = iframeDoc.getElementById("solutionOverlay");
+            // Also support class-based from workshops
+            const blurredContent = iframeDoc.querySelectorAll('.solution-content.blurred');
+            blurredContent.forEach(el => el.classList.remove('blurred'));
+            
+            const toggleBtns = iframeDoc.querySelectorAll('.toggle-btn');
+            toggleBtns.forEach(btn => {
+                 btn.classList.add('revealed');
+                 const icon = btn.querySelector('i');
+                 if(icon) icon.className = 'fas fa-eye-slash';
+                 const span = btn.querySelector('span');
+                 if(span) span.textContent = 'ซ่อนเฉลย';
+            });
+
             if (solutionContent) solutionContent.classList.add("revealed");
             if (solutionOverlay) solutionOverlay.classList.add("hidden");
           }
@@ -553,16 +639,9 @@
         updateRevealButton();
       }
 
-      // Button click handler
-      revealSolutionBtn.addEventListener("click", revealSolution);
-
-      // Add S key handler
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "s" || e.key === "S") {
-          e.preventDefault();
-          revealSolution();
-        }
-      });
+      if (revealSolutionBtn) {
+          revealSolutionBtn.addEventListener("click", revealSolution);
+      }
 
       // Override updateSlide to also update reveal button
       const originalUpdateSlide = updateSlide;
